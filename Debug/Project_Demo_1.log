@@ -1,0 +1,8 @@
+﻿  Source.cpp
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(106,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(107,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(269,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(270,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(271,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(272,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Project_Demo_1.vcxproj -> C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Debug\Project_Demo_1.exe
