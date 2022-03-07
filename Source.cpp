@@ -20,7 +20,7 @@ Units
 
 
 transformMatrix base_Relativeto_Station_T, tool_Relativeto_Wrist_T;
-
+bool gripStatus = false;
 
 int main(void) {
   // runs UI
@@ -35,7 +35,7 @@ int main(void) {
   */
 
   int inputOption;
-  bool gripStatus = false;
+
   JOINT jointParameters, sPt;
   JOINT T{ 0, 0, 140, 0 };
   JOINT B{ 0, 0, 405, 0 };
@@ -64,10 +64,10 @@ int main(void) {
       forwardKinematics(jointParameters, sPt);
       break;
     case 2:
-      inverseKinematics(jointParameters, sPt, false);
+      inverseKinematics(sPt, false, false);
       break;
     case 3:
-      inverseKinematics(jointParameters, sPt, false);
+      runPickAndPlace();
       break;
     case 4:
       printf("\n\nStopping and Resetting Robot\n\n");
@@ -89,7 +89,7 @@ int main(void) {
   return 0;
 }
 
-// Forward Kinematics
+// Forward Kinematics ############################################################################################################################################################
 void KIN(JOINT& jointVar, transformMatrix& writstRelativeBaseT) {
 
   double theta1 = jointVar[0];
@@ -157,7 +157,7 @@ void forwardKinematics(JOINT& jointVariables, JOINT& sPt_toolPostionWRTStation) 
   switch (option)
   {
   case 'Y':
-    inverseKinematics(inputConfig, sPt_toolPostionWRTStation, true);
+    inverseKinematics(sPt_toolPostionWRTStation, true, false);
     break;
   case 'N':
     break;
@@ -167,11 +167,12 @@ void forwardKinematics(JOINT& jointVariables, JOINT& sPt_toolPostionWRTStation) 
 
   return;
 }
+//############################################################################################################################################################
 
-//Inverse Kinematics
-void inverseKinematics(JOINT& jointVariables, JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp) {
+// Inverse Kinematics ############################################################################################################################################################
+bool inverseKinematics(JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp, uint8_t isItPickAndPlace) {
 
-  printf("\n\n****************************************\nForward Kinematics\n****************************************\n\n");
+  printf("\n\n****************************************\nInverse Kinematics\n****************************************\n\n");
 
   // All angles are in degrees
   double x, y, z, phi;
@@ -186,8 +187,17 @@ void inverseKinematics(JOINT& jointVariables, JOINT& sPt_toolPostionWRTStation, 
     x = sPt_toolPostionWRTStation[0];
     y = sPt_toolPostionWRTStation[1];
     z = sPt_toolPostionWRTStation[2];
-    phi = RAD2DEG(sPt_toolPostionWRTStation[3]);
-    printf("Calculated Inputs for Inverse Kinematics: [%f , %f , %f , %f (Deg)]\n", x, y, z, phi);
+    if (isItPickAndPlace) {
+      phi = sPt_toolPostionWRTStation[3];
+      printf("Inputs for Pick And Place: [%f , %f , %f , %f (Deg)]\n", x, y, z, phi);
+    }
+    else
+    {
+      phi = RAD2DEG(sPt_toolPostionWRTStation[3]);
+      printf("Calculated Inputs for Inverse Kinematics: [%f , %f , %f , %f (Deg)]\n", x, y, z, phi);
+    }
+
+
   }
 
   JOINT toolPosition{ x, y, z, DEG2RAD(phi) };
@@ -209,7 +219,7 @@ void inverseKinematics(JOINT& jointVariables, JOINT& sPt_toolPostionWRTStation, 
     printf("ERROR: (%f, %f, %f, %f)\n", RAD2DEG(secondSolution[0]), RAD2DEG(secondSolution[1]), secondSolution[2], RAD2DEG(secondSolution[3]));
     printf("ERROR: (%f, %f, %f, %f)\n\n", RAD2DEG(firstSolution[0]), RAD2DEG(firstSolution[1]), firstSolution[2], RAD2DEG(firstSolution[3]));
     cout << "\n\n$$$$$$$$$$$$$$$$$$$$$$$$\n\nNo Solutions\n\n";
-    return;
+    return 0;
   }
 
   else if (firstFlag && !secondFlag)
@@ -242,11 +252,10 @@ void inverseKinematics(JOINT& jointVariables, JOINT& sPt_toolPostionWRTStation, 
   firstSolution[0] = RAD2DEG(firstSolution[0]);
   firstSolution[1] = RAD2DEG(firstSolution[1]);
   firstSolution[3] = RAD2DEG(firstSolution[3]);
-  MoveToConfiguration(firstSolution);
-  return;
+  MoveToConfiguration(firstSolution, true);
+  return 1;
 }
 
-// Inverse Kinematics
 void calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOINT& farthestSolution, bool& firstFlag, bool& secondFlag)
 {
   double x = bTw[0][3];
@@ -365,18 +374,15 @@ void getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, J
   multiplyTwoTransformMatrices(bTs, sTt, bTt);
   multiplyTwoTransformMatrices(bTt, tTw, bTw);
   calculateAllTwoSolutions(bTw, firstSol, secondSol, flagFirst, flagSecond);
+  JOINT temp, itr;
 
   if (flagFirst && flagSecond)
   {
     float sums[2] = { 0, 0 };
-    // temp used for swapping near and far, itr used to iterate over near and far values when computing sums
-    JOINT temp, itr;
     copyArray(firstSol, itr);
-    // weights for each joint
     float w[4] = { 1, 1, 1, 1 };
-    int M = size(sums);
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 2; i++)
     {
       for (int j = 0; j < 4; j++)
       {
@@ -384,7 +390,6 @@ void getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, J
       }
       copyArray(secondSol, itr);
     }
-    // swap near and far if it is the closer joint
     if (sums[1] < sums[0])
     {
       copyArray(firstSol, temp);
@@ -393,6 +398,50 @@ void getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, J
     }
   }
 }
+//############################################################################################################################################################
+
+// Pick And Place #####################################################################
+void runPickAndPlace() {
+  printf("\n\n****************************************\nRunning Pick and Place\n****************************************\n\n");
+  cout << "Please Enter the first target's parameters [X,Y,Z,PHI]\n";
+  double x_1, y_1, z_1, phi_1;
+  getToolPositionFromUser(x_1, y_1, z_1, phi_1);
+
+  cout << "Please Enter the Second target's parameters [X,Y,Z,PHI]\n";
+  double x_2, y_2, z_2, phi_2;
+  getToolPositionFromUser(x_2, y_2, z_2, phi_2);
+
+  JOINT firstLocation{ x_1, y_1, z_1, phi_1 };
+  uint8_t status = inverseKinematics(firstLocation, true, true);
+
+  if (status) {
+
+    cout << "\nClosing Gripper to Pick the Object \n";
+    toggleGripper(gripStatus);
+    cout << "\nNow Moving to second location\n";
+    JOINT secondLocation{ x_2, y_2, z_2, phi_2 };
+
+    status = inverseKinematics(secondLocation, true, true);
+
+    if (status) {
+      cout << "\nToggling Gripper to Place the Object \n";
+      toggleGripper(gripStatus);
+    }
+    else
+    {
+      cout << "\n\nNO SOLUTIONS\n\n";
+    }
+
+  }
+  else
+  {
+    cout << "\n\nNO SOLUTIONS\n\n";
+  }
+
+
+  return;
+}
+
 
 void invertTransformMatrix(transformMatrix& aTb, transformMatrix& bTa)
 {
@@ -441,7 +490,7 @@ void extractPositionFromTransformMatrix(transformMatrix& transformMatrix, arrayO
 }
 
 void getToolPositionFromUser(double& x, double& y, double& z, double& phi) {
-  cout << "** Please, Enter Tool Position With Respect To Base [X,Y,Z,phi]**\n";
+  cout << "\n** Please, Enter Tool Position With Respect To Base [X,Y,Z,phi]**\n";
   printf("\tEnter X in MM :  ");
   cin >> x;
   printf("\tEnter Y in MM :  ");

@@ -47,7 +47,7 @@ void forwardKinematics(JOINT& jointVariables, JOINT& sPt_toolPostionWRTStation);
 
 void getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, JOINT& first, JOINT& second, bool& flagFirst, bool& flagSecond);
 void calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOINT& farthestSolution, bool& firstFlag, bool& secondFlag);
-void inverseKinematics(JOINT& jointVariables, JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp);
+bool inverseKinematics(JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp, uint8_t isItPickAndPlace);
 
 bool checkIfJointsAreWithinConstraints(JOINT& joinVar);
 void copyArray(JOINT& inputArray, JOINT& outputArray);
@@ -73,3 +73,5 @@ void multiplyPositionArrayWithValue(arrayOf3& inputPositionArray, double value, 
 void getToolPositionFromUser(double& x, double& y, double& z, double& phi);
 void getTransposedMatrix(rotationMatrix& a_R_b, rotationMatrix& b_R_a);
 void extractPositionFromTransformMatrix(transformMatrix& transformMatrix, arrayOf3& excractedPositionVector);
+
+void runPickAndPlace(void);
