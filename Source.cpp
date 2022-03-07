@@ -273,42 +273,42 @@ void calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOIN
   double Theta2_1 = atan2(sTheta2, cTheta2);
   double Theta2_2 = atan2(-sTheta2, cTheta2);
 
-  double k1_p = D1_BASE_TO_JOINT2_X + double(D2_WRIST_TO_JOINT2_X * double(cosf(Theta2_1)));
-  double k2_p = double(D2_WRIST_TO_JOINT2_X * double(sinf(Theta2_1)));
+  double k1_1 = D1_BASE_TO_JOINT2_X + double(D2_WRIST_TO_JOINT2_X * double(cosf(Theta2_1)));
+  double k2_1 = double(D2_WRIST_TO_JOINT2_X * double(sinf(Theta2_1)));
 
-  double k1_n = D1_BASE_TO_JOINT2_X + double(D2_WRIST_TO_JOINT2_X * double(cosf(Theta2_2)));
-  double k2_n = double(D2_WRIST_TO_JOINT2_X * double(sinf(Theta2_2)));
+  double k1_2 = D1_BASE_TO_JOINT2_X + double(D2_WRIST_TO_JOINT2_X * double(cosf(Theta2_2)));
+  double k2_2 = double(D2_WRIST_TO_JOINT2_X * double(sinf(Theta2_2)));
 
-  double alpha11_p = atan2(y, x) - atan2(k2_p, k1_p);
-  double theta1_1 = alpha11_p;
+  double temp_1 = atan2(y, x) - atan2(k2_1, k1_1);
+  double theta1_1 = temp_1;
 
-  double alpha12_p = abs(abs(alpha11_p) - DEG2RAD(360));
+  double temp2_1 = abs(abs(temp_1) - DEG2RAD(360));
 
-  if (abs(alpha11_p) > DEG2RAD(THETA_1_DEG_CON))
+  if (abs(temp_1) > DEG2RAD(THETA_1_DEG_CON))
   {
-    if (alpha12_p < DEG2RAD(A210) && alpha12_p > DEG2RAD(A150))
+    if (temp2_1 < DEG2RAD(ANGLE_210) && temp2_1 > DEG2RAD(ANGLE_150))
     {
       firstInvalid = true;
     }
     else
     {
-      theta1_1 = (alpha11_p / abs(alpha11_p)) * (abs(alpha11_p) - DEG2RAD(360));
+      theta1_1 = (temp_1 / abs(temp_1)) * (abs(temp_1) - DEG2RAD(360));
     }
   }
 
-  double alpha11_n = atan2(y, x) - atan2(k2_n, k1_n);
-  double theta1_2 = alpha11_n;
-  double alpha12_n = abs(abs(alpha11_n) - DEG2RAD(360));
+  double temp_2 = atan2(y, x) - atan2(k2_2, k1_2);
+  double theta1_2 = temp_2;
+  double temp2_2 = abs(abs(temp_2) - DEG2RAD(360));
 
-  if (abs(alpha11_n) > DEG2RAD(THETA_1_DEG_CON))
+  if (abs(temp_2) > DEG2RAD(THETA_1_DEG_CON))
   {
-    if (alpha12_n < DEG2RAD(A210) && alpha12_n > DEG2RAD(A150))
+    if (temp2_2 < DEG2RAD(ANGLE_210) && temp2_2 > DEG2RAD(ANGLE_150))
     {
       secondInvalid = true;
     }
     else
     {
-      theta1_2 = (alpha11_n / abs(alpha11_n)) * (abs(alpha11_n) - DEG2RAD(360));
+      theta1_2 = (temp_2 / abs(temp_2)) * (abs(temp_2) - DEG2RAD(360));
     }
   }
   double phi = atan2(sPhi, cPhi);
@@ -317,7 +317,7 @@ void calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOIN
   double alpha42_p = abs(abs(alpha41_p) - DEG2RAD(360));
   if (abs(alpha41_p) > DEG2RAD(THETA_4_DEG_CON))
   {
-    if (alpha42_p < DEG2RAD(A210 - 0.0001) && alpha42_p > DEG2RAD(A150 + 0.0001))
+    if (alpha42_p < DEG2RAD(ANGLE_210 - 0.0001) && alpha42_p > DEG2RAD(ANGLE_150 + 0.0001))
     {
       firstInvalid = true;
     }
@@ -336,7 +336,7 @@ void calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOIN
   double alpha42_n = abs(abs(alpha41_n) - DEG2RAD(360));
   if (abs(alpha41_n) > DEG2RAD(THETA_4_DEG_CON))
   {
-    if (alpha42_n < DEG2RAD(A210 - 0.0001) && alpha42_n > DEG2RAD(A150 + 0.0001))
+    if (alpha42_n < DEG2RAD(ANGLE_210 - 0.0001) && alpha42_n > DEG2RAD(ANGLE_150 + 0.0001))
     {
       firstInvalid = true;
     }
