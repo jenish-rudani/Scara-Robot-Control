@@ -96,6 +96,11 @@ void KIN(JOINT& jointVar, transformMatrix& writstRelativeBaseT) {
   double theta2 = jointVar[1];
   double D3 = jointVar[2];
   double theta4 = jointVar[3];
+  cout << RAD2DEG(theta4);
+
+  cout << RAD2DEG(theta1);
+
+  cout << RAD2DEG(theta2);
   double phi = theta1 + theta2 - theta4; // Clockwise, Clockwise, Anti-Clockwise
 
   double cos_phi = cosf(phi);
@@ -213,7 +218,10 @@ bool inverseKinematics(JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp, 
 
 
   bool firstFlag, secondFlag;
-  getSolutionsForInverseKIN(toolPosition, currentJointConfig, firstSolution, secondSolution, firstFlag, secondFlag);
+  uint8_t status1 = getSolutionsForInverseKIN(toolPosition, currentJointConfig, firstSolution, secondSolution, firstFlag, secondFlag);
+  if (!status1) {
+    return 0;
+  }
   if (!firstFlag && !secondFlag)
   {
     printf("ERROR: (%f, %f, %f, %f)\n", RAD2DEG(secondSolution[0]), RAD2DEG(secondSolution[1]), secondSolution[2], RAD2DEG(secondSolution[3]));
@@ -256,7 +264,7 @@ bool inverseKinematics(JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp, 
   return 1;
 }
 
-void calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOINT& farthestSolution, bool& firstFlag, bool& secondFlag)
+bool calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOINT& farthestSolution, bool& firstFlag, bool& secondFlag)
 {
   double x = bTw[0][3];
   double y = bTw[1][3];
@@ -267,11 +275,26 @@ void calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOIN
   bool firstInvalid = false;
   bool secondInvalid = false;
 
-  double cTheta2 = (pow(x, 2) + pow(y, 2) - pow(D2_WRIST_TO_JOINT2_X, 2) - pow(D1_BASE_TO_JOINT2_X, 2)) / (2 * D2_WRIST_TO_JOINT2_X * D1_BASE_TO_JOINT2_X);
-  double sTheta2 = sqrt(1 - pow(cTheta2, 2));
+  double c2 = (pow(x, 2) + pow(y, 2) - pow(D2_WRIST_TO_JOINT2_X, 2) - pow(D1_BASE_TO_JOINT2_X, 2)) / (2 * D2_WRIST_TO_JOINT2_X * D1_BASE_TO_JOINT2_X);
+  double s2 = sqrt(1 - pow(c2, 2));
+  double temp111 = sqrt(pow(x, 2) + pow(y, 2));
+  double temp123 = D1_BASE_TO_JOINT2_X + D2_WRIST_TO_JOINT2_X;
 
-  double Theta2_1 = atan2(sTheta2, cTheta2);
-  double Theta2_2 = atan2(-sTheta2, cTheta2);
+  if (abs(temp111 - temp123) < 2)//Checks if there is 1 solution  
+  {
+    double D3;
+    D3 = D1_BASE_TO_JOINT2_X - WRIST_TO_TOOL_Z - z;
+    double Theta2 = 0;
+    double Theta1 = atan2(y / (D2_WRIST_TO_JOINT2_X + D1_BASE_TO_JOINT2_X), x / (D2_WRIST_TO_JOINT2_X + D1_BASE_TO_JOINT2_X));
+    double Phi = atan2(sPhi, cPhi);
+    double Theta4 = Phi - Theta1 - Theta2;
+    printf("\n\n*** There is 1 solution and it is: (%f deg, %f deg, %f mm, %f deg) \n", Theta1 * 180 / PI, Theta2 * 180 / PI, D3, Theta4 * 180 / PI);
+    return 0;
+  }
+
+
+  double Theta2_1 = atan2(s2, c2);
+  double Theta2_2 = atan2(-s2, c2);
 
   double k1_1 = D1_BASE_TO_JOINT2_X + double(D2_WRIST_TO_JOINT2_X * double(cosf(Theta2_1)));
   double k2_1 = double(D2_WRIST_TO_JOINT2_X * double(sinf(Theta2_1)));
@@ -361,9 +384,10 @@ void calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOIN
 
   copyArray(firstSol, closestSolution);
   copyArray(secondSol, farthestSolution);
+  return 1;
 }
 
-void getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, JOINT& firstSol, JOINT& secondSol, bool& flagFirst, bool& flagSecond) {
+bool getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, JOINT& firstSol, JOINT& secondSol, bool& flagFirst, bool& flagSecond) {
 
   transformMatrix wrels, bTw, sTt, bTt;
   transformMatrix bTs, tTw;
@@ -373,7 +397,10 @@ void getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, J
   invertTransformMatrix(tool_Relativeto_Wrist_T, tTw);
   multiplyTwoTransformMatrices(bTs, sTt, bTt);
   multiplyTwoTransformMatrices(bTt, tTw, bTw);
-  calculateAllTwoSolutions(bTw, firstSol, secondSol, flagFirst, flagSecond);
+  bool status = calculateAllTwoSolutions(bTw, firstSol, secondSol, flagFirst, flagSecond);
+  if (!status) {
+    return 0;
+  }
   JOINT temp, itr;
 
   if (flagFirst && flagSecond)
@@ -397,6 +424,7 @@ void getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, J
       copyArray(temp, secondSol);
     }
   }
+  return 1;
 }
 //############################################################################################################################################################
 

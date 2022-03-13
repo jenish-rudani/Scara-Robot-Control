@@ -28,7 +28,7 @@
 #define D3_MAX_BOUND -100
 #define ANGLE_210 210
 #define ANGLE_150 150
-
+#define WRIST_TO_TOOL_Z 140
 #define THETA_1_RADIAN_CON DEG2RAD(THETA_1_DEG_CON)
 #define THETA_2_RADIAN_CON DEG2RAD(THETA_2_DEG_CON)
 #define THETA_4_RADIAN_CON DEG2RAD(THETA_4_DEG_CON)
@@ -45,8 +45,8 @@ void KIN(JOINT& jointVar, transformMatrix& writstRelativeBaseT);
 void WHERE(JOINT& jointVar, JOINT& sPt);
 void forwardKinematics(JOINT& jointVariables, JOINT& sPt_toolPostionWRTStation);
 
-void getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, JOINT& first, JOINT& second, bool& flagFirst, bool& flagSecond);
-void calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOINT& farthestSolution, bool& firstFlag, bool& secondFlag);
+bool getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, JOINT& first, JOINT& second, bool& flagFirst, bool& flagSecond);
+bool calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOINT& farthestSolution, bool& firstFlag, bool& secondFlag);
 bool inverseKinematics(JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp, uint8_t isItPickAndPlace);
 
 bool checkIfJointsAreWithinConstraints(JOINT& joinVar);
