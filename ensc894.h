@@ -37,6 +37,18 @@ using namespace std;
 #define THETA_4_RADIAN_CON DEG2RAD(THETA_4_DEG_CON)
 
 
+// Velocity constraints
+#define JOINT1_VEL_LIM 150 
+#define JOINT2_VEL_LIM 150
+#define JOINT3_VEL_LIM 50
+#define JOINT4_VEL_LIM 150
+
+// Acceleration constraints
+#define JOINT1_ACC_LIM 600
+#define JOINT2_ACC_LIM 600
+#define JOINT3_ACC_LIM 200
+#define JOINT4_ACC_LIM 600
+
 typedef double transformMatrix[4][4];
 typedef double rotationMatrix[3][3];
 
@@ -79,6 +91,11 @@ void genAccelerationHelperFunction(double ti, double tf, vector<double>& coeff, 
 void calculateCoefficients(arrayOf5& jointParamArr, arrayOf5& trajectoryTimeSegments, JOINT& currJConfig2A_coeff, JOINT& A2B_coeff, JOINT& B2C_coeff, JOINT& C2G_coeff);
 void calculateCubicCoefficients(double theta0, double thetaf, double vel0, double velf, double tf, JOINT& coeff);
 void displayJointVar(vector<vector<double>>& currJConfig2A_coeff, vector<vector<double>>& A2B_coeff, vector<vector<double>>& B2C_coeff, vector<vector<double>>& C2G_coeff);
+
+bool checkVelocityLimits(vector<vector<double>> vals);
+bool checkAccLimits(vector<vector<double>> vals);
+void genPos(vector<double> theta1, vector<double> theta2, vector<double>& d3, vector<double> theta4, vector<double>& x, vector<double>& y, vector<double>& z, vector<double>& phi);
+void WriteParamToCsvFile(string filename, vector<pair<string, vector<double>>> data);
 //##########################
 
 void getPositionVectorFromTransformMatrix(transformMatrix& tmat, arrayOf3& pos);

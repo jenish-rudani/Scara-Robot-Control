@@ -370,19 +370,18 @@ void planPathBasedOnJointSpace(JOINT& currentJointConfiguration, JOINT& A_positi
   double maximumTime = currTimeVec[lengthOfVector - 1];
   int inc = 1000 * (maximumTime) / lengthOfVector;
 
-  printf("Moving to (%f, %f, %f, %f)\n", RAD2DEG(currJConfig2A_PositionVec[lengthOfVector - 1]), RAD2DEG(A2B_PositionVec[lengthOfVector - 1]), B2C_PositionVec[lengthOfVector - 1], RAD2DEG(C2G_PositionVec[lengthOfVector - 1]));
+  printf("Moving joints to (%f, %f, %f, %f)\n", RAD2DEG(currJConfig2A_PositionVec[lengthOfVector - 1]), RAD2DEG(A2B_PositionVec[lengthOfVector - 1]), B2C_PositionVec[lengthOfVector - 1], RAD2DEG(C2G_PositionVec[lengthOfVector - 1]));
 
   for (int i = 0; i < lengthOfVector; i++) {
-
+    // convert values to appropriate values		
 
     JOINT pos{ RAD2DEG(currJConfig2A_PositionVec[i]), RAD2DEG(A2B_PositionVec[i]), B2C_PositionVec[i], RAD2DEG(C2G_PositionVec[i]) };
     JOINT vel{ RAD2DEG(currJConfig2A_VelVec[i]), RAD2DEG(A2B_VelVec[i]), B2C_VelVec[i], RAD2DEG(C2G_VelVec[i]) };
     JOINT acc{ RAD2DEG(currJConfig2A_AccVec[i]), RAD2DEG(A2B_AccVec[i]), B2C_AccVec[i], RAD2DEG(C2G_AccVec[i]) };
 
     MoveWithConfVelAcc(pos, vel, acc);
-
-    //printf("Pos #%d: (%f, %f, %f, %f)\n", i + 1, RAD2DEG(currJConfig2A_PositionVec[i]), RAD2DEG(A2B_PositionVec[i]), B2C_PositionVec[i], RAD2DEG(C2G_PositionVec[i]));
-
+    printf("Pos #%d: (%f, %f, %f, %f)\n", i + 1, RAD2DEG(currJConfig2A_PositionVec[i]), RAD2DEG(A2B_PositionVec[i]), B2C_PositionVec[i], RAD2DEG(C2G_PositionVec[i]));
+    //sleep for inc amount of time
     std::this_thread::sleep_for(std::chrono::milliseconds(inc));
     continue;
   }
