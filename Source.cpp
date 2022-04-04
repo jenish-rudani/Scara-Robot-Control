@@ -344,11 +344,11 @@ void planPathBasedOnJointSpace(JOINT& currentJointConfiguration, JOINT& A_positi
   for (int i = 0; i < lengthOfVector; i++) {
     // convert values to appropriate values		
 
-    JOINT conf{ RAD2DEG(currJConfig2A_PositionVec[i]), RAD2DEG(A2B_PositionVec[i]), B2C_PositionVec[i], RAD2DEG(C2G_PositionVec[i]) };
+    JOINT pos{ RAD2DEG(currJConfig2A_PositionVec[i]), RAD2DEG(A2B_PositionVec[i]), B2C_PositionVec[i], RAD2DEG(C2G_PositionVec[i]) };
     JOINT vel{ RAD2DEG(currJConfig2A_VelVec[i]), RAD2DEG(A2B_VelVec[i]), B2C_VelVec[i], RAD2DEG(C2G_VelVec[i]) };
     JOINT acc{ RAD2DEG(currJConfig2A_AccVec[i]), RAD2DEG(A2B_AccVec[i]), B2C_AccVec[i], RAD2DEG(C2G_AccVec[i]) };
 
-    MoveWithConfVelAcc(conf, vel, acc);
+    MoveWithConfVelAcc(pos, vel, acc);
     printf("Pos #%d: (%f, %f, %f, %f)\n", i + 1, RAD2DEG(currJConfig2A_PositionVec[i]), RAD2DEG(A2B_PositionVec[i]), B2C_PositionVec[i], RAD2DEG(C2G_PositionVec[i]));
     //sleep for inc amount of time
     std::this_thread::sleep_for(std::chrono::milliseconds(inc));
@@ -405,14 +405,12 @@ void generateAcceleration(arrayOf5& timeArr, vector<vector<double>>& currJConfig
 
 void genAccelerationHelperFunction(double ti, double tf, vector<double>& coeff, vector<double>& acc, vector<double>& currTimeVec, bool isFull) {
 
-  // Computes the acceleration of the path vs. time
   // Units: rad/s^2
   double t = tf - ti;
-  int num_points = (t * sample_rate) + 1; // + 2 to get the final position as well
-  for (int i = 0; i < num_points; i++) {
+  int totalNumberOfPoints = (t * sample_rate) + 1; // + 2 to get the final position as well
+  for (int i = 0; i < totalNumberOfPoints; i++) {
     if (isFull == false) currTimeVec.push_back(ti + i / sample_rate);
     acc.push_back(2 * coeff[2] + 6 * coeff[3] * currTimeVec[i]);
-    //acc.push_back(2*coeff[2] +	6*coeff[3]*curr_time[i] + 12*coeff[4]*pow(curr_time[i], 2) + 20*coeff[5]*pow(curr_time[i], 3));
   }
 
 }
@@ -458,15 +456,37 @@ void generateVelocity(arrayOf5& timeArr, vector<vector<double>>& currJConfig2A_c
 
 }
 
+void WriteParamToCsvFile(string filename, vector<pair<string, vector<double>>> dataset) {
+  ofstream myFile(filename);
+  // send column names to the stream
+  for (int j = 0; j < dataset.size(); ++j) {
+    myFile << dataset.at(j).first;
+    if (j != dataset.size() - 1) myFile << ",";
+  }
+  myFile << "\n";
+  // send data to the stream
+  for (int i = 0; i < dataset.at(0).second.size(); ++i)
+  {
+    for (int j = 0; j < dataset.size(); ++j)
+    {
+      myFile << dataset.at(j).second.at(i);
+      if (j != dataset.size() - 1) myFile << ","; // No comma at end of line
+    }
+    myFile << "\n";
+  }
+  // Close the file
+  myFile.close();
+}
+
 void genVelocityHelperFunction(double ti, double tf, vector<double>& coeff, vector<double>& vel, vector<double>& currTimeVec, bool isFull) {
+
   // Computes the velocity of the path vs. time
   // Units: rad/s
   double t = tf - ti;
-  int num_points = (t * sample_rate) + 1; // + 2 to get the final position as well
-  for (int i = 0; i < num_points; i++) {
+  int totalPoints = (t * sample_rate) + 1;
+  for (int i = 0; i < totalPoints; i++) {
     if (isFull == false) currTimeVec.push_back(ti + i / sample_rate);
     vel.push_back(coeff[1] + 2 * coeff[2] * currTimeVec[i] + 3 * coeff[3] * pow(currTimeVec[i], 2));
-    //vel.push_back(coeff[1] + 2*coeff[2]*curr_time[i] + 3*coeff[3]*pow(curr_time[i], 2) + 4*coeff[4]*pow(curr_time[i], 3) + 5*coeff[5]*pow(curr_time[i], 4));
   }
 
 }
@@ -510,25 +530,15 @@ void generatePath(arrayOf5& timeArr, vector<vector<double>>& currJConfig2A_coeff
       break;
     }
   }
-
+  vector<pair<string, vector<double>>> temp = { {"Time", currTimeVec}, {"theta1_pos", theta1_pos}, {"theta2_pos", theta2_pos}, {"d3_pos", d3_pos}, {"theta4_pos", theta4_pos} };
+  WriteParamToCsvFile("Position.csv", temp);
 }
 
 void genPathHelperFunction(double ti, double tf, vector<double>& coeff, vector<double>& pos, vector<double>& currTimeVec, bool isFull) {
-  /* Computes the position of the path, theta(t)
-    Input:
-      - ti: initial time for cubic spline
-      - tf: final time for cubic spline
-      - sample_rate: how frequent we want to compute values
-      - coeff: the cubic spline coefficients
-      - theta: position values passed by reference (y axis)
-      - currTimeVec: time values passed by reference (x axis)
-      - isFull: To stop currTimeVec vector from filling, default value False
-    Output:
-      - pos (y, t): the output positions
-  */
+
   double t = tf - ti;
-  int num_points = (t * sample_rate) + 1; // + 2 to get the final position as well
-  for (double i = 0; i < num_points; i++) {
+  int totalNumberOfPoints = (t * sample_rate) + 1; // + 2 to get the final position as well
+  for (double i = 0; i < totalNumberOfPoints; i++) {
     if (isFull == false) currTimeVec.push_back(ti + i / sample_rate);
     pos.push_back(coeff[0] + coeff[1] * currTimeVec[i] + coeff[2] * pow(currTimeVec[i], 2) + coeff[3] * pow(currTimeVec[i], 3));
   }
@@ -560,17 +570,13 @@ void displayJointVar(vector<vector<double>>& currJConfig2A_coeff, vector<vector<
 }
 
 void calculateCoefficients(arrayOf5& jointParamArr, arrayOf5& trajectoryTimeSegments, JOINT& currJConfig2A_coeff, JOINT& A2B_coeff, JOINT& B2C_coeff, JOINT& C2G_coeff) {
-  // takes the joint values, and computes the cubic coefficients between subsequent 
-  // joint values
-  // Assumes Curr -> A -> B -> C -> G
-  // compute the slopes of each line segment
+
   arrayOf4 slopes;
 
   arrayOf4 diffTrajectoryTimeSegments{ trajectoryTimeSegments[1] - trajectoryTimeSegments[0], trajectoryTimeSegments[2] - trajectoryTimeSegments[1], trajectoryTimeSegments[3] - trajectoryTimeSegments[2], trajectoryTimeSegments[4] - trajectoryTimeSegments[3] };
 
-  // computes the slope of the line segment
-  int sz = sizeof(slopes) / sizeof(*slopes);
-  for (int i = 0; i < sz; i++) {
+  int length = sizeof(slopes) / sizeof(*slopes);
+  for (int i = 0; i < length; i++) {
     slopes[i] = (jointParamArr[i + 1] - jointParamArr[i]) / (trajectoryTimeSegments[i + 1] - trajectoryTimeSegments[i]);
   }
 
@@ -579,8 +585,8 @@ void calculateCoefficients(arrayOf5& jointParamArr, arrayOf5& trajectoryTimeSegm
   - if slope's sign change, vel = 0
   - if slope's sign does not change, vel = average of two slopes */
   arrayOf3 temp1;
-  sz = sizeof(temp1) / sizeof(*temp1);
-  for (int i = 0; i < sz; i++) {
+  length = sizeof(temp1) / sizeof(*temp1);
+  for (int i = 0; i < length; i++) {
     if (slopes[i] > 0 && slopes[i + 1] < 0 || slopes[i] < 0 && slopes[i + 1] > 0) {
       temp1[i] = 0;
     }
