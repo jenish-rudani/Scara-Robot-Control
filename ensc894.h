@@ -50,17 +50,16 @@ using namespace std;
 #define JOINT4_ACC_LIM 600
 
 typedef double transformMatrix[4][4];
+typedef double arrayOf4[4];
 typedef double rotationMatrix[3][3];
 
-typedef double arrayOf3[3];
-typedef double arrayOf5[5];
-typedef double arrayOf4[4];
 
 int main(void);
 
 void KIN(JOINT& jointVar, transformMatrix& writstRelativeBaseT);
 void WHERE(JOINT& jointVar, JOINT& sPt);
 void forwardKinematics(JOINT& jointVariables, JOINT& sPt_toolPostionWRTStation);
+typedef double arrayOf3[3];
 
 bool getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, JOINT& first, JOINT& second, bool& flagFirst, bool& flagSecond);
 bool calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOINT& farthestSolution, bool& firstFlag, bool& secondFlag);
@@ -70,6 +69,7 @@ void trajectoryPlanning();
 void planPathBasedOnJointSpace(JOINT& currentJointConfiguration, JOINT& A_positionVar, JOINT& B_positionVar, JOINT& C_positionVar, JOINT& G_positionVar, double trajectoryTime);
 
 bool checkIfJointsAreWithinConstraints(JOINT& joinVar);
+typedef double arrayOf5[5];
 void copyArray(JOINT& inputArray, JOINT& outputArray);
 void getJointParametersFromUser(double& theta_1, double& theta_2, double& d3, double& theta_4);
 void convertJointPramaterAnglesToRadian(double& theta_1, double& theta_2, double d3, double& theta_4, JOINT& jointVariables);

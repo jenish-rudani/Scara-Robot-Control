@@ -1,24 +1,24 @@
 ﻿  Source.cpp
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(371,11): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(511,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(566,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(572,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(574,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(590,19): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(644,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(647,53): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(647,85): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(647,121): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(763,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(376,11): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(515,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(568,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(574,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(576,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(592,19): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(645,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(648,53): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(648,85): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(648,121): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
 C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(764,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(967,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(968,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(970,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(971,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1084,64): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1060,19): warning C4101: 'wrels': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1353,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(765,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(968,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(969,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(971,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(972,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1085,64): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1061,19): warning C4101: 'wrels': unreferenced local variable
 C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1354,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1355,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1356,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1356,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1357,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   Project_Demo_1.vcxproj -> C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Debug\Project_Demo_1.exe

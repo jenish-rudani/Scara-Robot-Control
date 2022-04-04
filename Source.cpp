@@ -19,7 +19,7 @@ Units
 */
 
 #define DEBUG_TRAJECTORY_PLANNING 1
-#define sample_rate 50
+#define sample_rate 100
 bool TRAJECTORY_PLANNING = 0;
 
 
@@ -130,12 +130,14 @@ void trajectoryPlanning() {
     JOINT B_positionVar{ x_b, y_b, z_b, DEG2RAD(phi_b) };
     JOINT C_positionVar{ x_c, y_c, z_c, DEG2RAD(phi_c) };
     JOINT G_positionVar{ x_g, y_g, z_g, DEG2RAD(phi_g) };
-    cout << "\n\n****** You have entered following parameters ******\n\n";
-    cout << "A: " << A_positionVar[0] << " | " << A_positionVar[1] << " | " << A_positionVar[2] << " | " << A_positionVar[3] << endl;
-    cout << "B: " << B_positionVar[0] << " | " << B_positionVar[1] << " | " << B_positionVar[2] << " | " << B_positionVar[3] << endl;
-    cout << "C: " << C_positionVar[0] << " | " << C_positionVar[1] << " | " << C_positionVar[2] << " | " << C_positionVar[3] << endl;
-    cout << "G: " << G_positionVar[0] << " | " << G_positionVar[1] << " | " << G_positionVar[2] << " | " << G_positionVar[3] << endl;
-
+    cout << "\n\n*******************************************************\n";
+    cout << " -- You have entered following parameters  --\n";
+    cout << "\tFrame:  X   |  Y  |  Z  | phi\n";
+    cout << "\tA:   [ " << A_positionVar[0] << "  | " << A_positionVar[1] << " | " << A_positionVar[2] << " | " << A_positionVar[3] << " ]" << endl;
+    cout << "\tB:   [" << B_positionVar[0] << "  | " << B_positionVar[1] << " | " << B_positionVar[2] << " | " << B_positionVar[3] << " ]" << endl;
+    cout << "\tC:   [" << C_positionVar[0] << "  |" << C_positionVar[1] << " | " << C_positionVar[2] << " | " << C_positionVar[3] << " ]" << endl;
+    cout << "\tG:   [ " << G_positionVar[0] << "  |" << G_positionVar[1] << " | " << G_positionVar[2] << " | " << G_positionVar[3] << " ]" << endl;
+    cout << "*******************************************************\n\n";
   }
   else {
     A_positionVar[0] = 100;
@@ -331,20 +333,23 @@ void planPathBasedOnJointSpace(JOINT& currentJointConfiguration, JOINT& A_positi
   yTarget.push_back(G_positionVar[1]);
 
   vector<pair<string, vector<double>>> XY_TargetValues = { {"X_targ", xTarget}, {"Y_targ", yTarget} };
-  WriteParamToCsvFile("XY_targ.csv", XY_TargetValues);
+  WriteParamToCsvFile("XY_InputParameters.csv", XY_TargetValues);
 
   // Checking Velocity and Acceleration limits
   bool vlStatus = checkVelocityLimits(velocityVec);
   if (!vlStatus) {
-    cout << "\n!!!!!!!!!!!!!---- WARNING ----!!!!!!!!!!!!!!!!\n";
+    cout << "\n!!!!!!!!!!!!!---- ERROR ----!!!!!!!!!!!!!!!!\n";
     cout << "Exceeded Velocity limits!\n";
   }
   bool accStatus = checkAccLimits(accelerationVec);
   if (!accStatus) {
-    cout << "\n!!!!!!!!!!!!!---- WARNING ----!!!!!!!!!!!!!!!!\n";
+    cout << "\n!!!!!!!!!!!!!---- ERROR ----!!!!!!!!!!!!!!!!\n";
     cout << "Exceeded Velocity limits!\n";
   }
 
+  bool continueToMove;
+  cout << "\n\n*****************************\n]\nDo you want to move the robot ? [ 1/0 ] : ";
+  cin >> continueToMove;
 
   vector<double> currJConfig2A_PositionVec, A2B_PositionVec, B2C_PositionVec, C2G_PositionVec;
   vector<double> currJConfig2A_VelVec, A2B_VelVec, B2C_VelVec, C2G_VelVec;
@@ -501,8 +506,6 @@ void generateAcceleration(arrayOf5& timeArr, vector<vector<double>>& currJConfig
       break;
     }
   }
-  vector<pair<string, vector<double>>> acc = { {"Time", currTimeVec}, {"theta1_acc", theta1_acc}, {"theta2_acc", theta2_acc}, {"d3_acc", d3_acc}, {"theta4_acc", theta4_acc} };
-  WriteParamToCsvFile("Acceleration.csv", acc);
 }
 
 void genAccelerationHelperFunction(double ti, double tf, vector<double>& coeff, vector<double>& acc, vector<double>& currTimeVec, bool isFull) {
@@ -556,8 +559,6 @@ void generateVelocity(arrayOf5& timeArr, vector<vector<double>>& currJConfig2A_c
     }
   }
 
-  vector<pair<string, vector<double>>> vel = { {"Time", currTimeVec}, {"theta1_vel", theta1_vel}, {"theta2_vel", theta2_vel}, {"d3_vel", d3_vel}, {"theta4_vel", theta4_vel} };
-  WriteParamToCsvFile("Velocity.csv", vel);
 
 }
 
@@ -635,8 +636,7 @@ void generatePath(arrayOf5& timeArr, vector<vector<double>>& currJConfig2A_coeff
       break;
     }
   }
-  vector<pair<string, vector<double>>> temp = { {"Time", currTimeVec}, {"theta1_pos", theta1_pos}, {"theta2_pos", theta2_pos}, {"d3_pos", d3_pos}, {"theta4_pos", theta4_pos} };
-  WriteParamToCsvFile("Position.csv", temp);
+
 }
 
 void genPathHelperFunction(double ti, double tf, vector<double>& coeff, vector<double>& pos, vector<double>& currTimeVec, bool isFull) {
