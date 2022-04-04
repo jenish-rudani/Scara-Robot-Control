@@ -17,14 +17,15 @@ Units
 • MM2M(x) / M2MM(x)
 */
 
-
+#define DEBUG_TRAJECTORY_PLANNING 1
+#define sample_rate 500
 
 transformMatrix base_Relativeto_Station_T, tool_Relativeto_Wrist_T;
 bool gripStatus = false;
 
 int main(void) {
-  // runs UI
 
+  // Console UI
   /* Menu Options:
   1. Forward Kinematics
   2. Inverse Kinematics
@@ -39,7 +40,6 @@ int main(void) {
   JOINT jointParameters, sPt;
   JOINT T{ 0, 0, 140, 0 };
   JOINT B{ 0, 0, 405, 0 };
-
   parametersToTransformMatrix(B, base_Relativeto_Station_T);
   parametersToTransformMatrix(T, tool_Relativeto_Wrist_T);
 
@@ -51,7 +51,8 @@ int main(void) {
     cout << "\t2. Inverse Kinematics\n";
     cout << "\t3. Pick and Place\n";
     cout << "\t4. Stop+Reset Robot\n";
-    cout << "\t5. Toggle Gripper\n";
+    cout << "\t5. Trajectory Planning, Input: 4x1 V(x,y,z,phi)\n";
+    cout << "\t6. Toggle Gripper\n";
     cout << "\t0. Exit\n" << endl;
     cout << "****************************************\n\n";
     printf("Please Choose an option from above: ");
@@ -75,6 +76,9 @@ int main(void) {
       ResetRobot();
       break;
     case 5:
+      printf("\n\nStarting Trajectory Planning\n\n");
+      trajectoryPlanning();
+    case 6:
       toggleGripper(gripStatus);
       break;
     case 0: // Exit
@@ -89,7 +93,396 @@ int main(void) {
   return 0;
 }
 
-// Forward Kinematics ############################################################################################################################################################
+// Terajectory Planning ################################################################################################################
+void trajectoryPlanning() {
+  cout << "Trajectory Planning ( Three Via Points: A,B,C )" << endl;
+
+  double trajectoryTime;
+
+  cout << "Please, Enter time for Trajectory in Seconds: ";
+  cin >> trajectoryTime;
+
+  double x_a, y_a, z_a, phi_a;
+  char tempString[] = "Please, Enter Parameters for Via Point 'A'";
+  getToolPositionFromUser(x_a, y_a, z_a, phi_a, tempString);
+
+  double x_b, y_b, z_b, phi_b;
+  strcpy_s(tempString, "Please, Enter Parameters Via Point 'B'");
+  getToolPositionFromUser(x_b, y_b, z_b, phi_b, tempString);
+
+  double x_c, y_c, z_c, phi_c;
+  strcpy_s(tempString, "Please, Enter Parameters Via Point 'C'");
+  getToolPositionFromUser(x_c, y_c, z_c, phi_c, tempString);
+
+  double x_g, y_g, z_g, phi_g;
+  strcpy_s(tempString, "Please, Enter Parameters for Goal Point 'G'");
+  getToolPositionFromUser(x_g, y_g, z_g, phi_g, tempString);
+
+  JOINT A_positionVar{ x_a, y_a, z_a, DEG2RAD(phi_a) };
+  JOINT B_positionVar{ x_b, y_b, z_b, DEG2RAD(phi_b) };
+  JOINT C_positionVar{ x_c, y_c, z_c, DEG2RAD(phi_c) };
+  JOINT G_positionVar{ x_g, y_g, z_g, DEG2RAD(phi_g) };
+
+  if (DEBUG_TRAJECTORY_PLANNING) {
+    cout << "\n\n****** You have entered following parameters ******\n\n";
+    cout << "A: " << A_positionVar[0] << " | " << A_positionVar[1] << " | " << A_positionVar[2] << " | " << A_positionVar[3] << endl;
+    cout << "B: " << B_positionVar[0] << " | " << B_positionVar[1] << " | " << B_positionVar[2] << " | " << B_positionVar[3] << endl;
+    cout << "C: " << C_positionVar[0] << " | " << C_positionVar[1] << " | " << C_positionVar[2] << " | " << C_positionVar[3] << endl;
+    cout << "G: " << G_positionVar[0] << " | " << G_positionVar[1] << " | " << G_positionVar[2] << " | " << G_positionVar[3] << endl;
+  }
+
+
+  JOINT currentJointConfiguration; // get the current joint values of the robotic arm
+  GetConfiguration(currentJointConfiguration);
+  currentJointConfiguration[0] = DEG2RAD(currentJointConfiguration[0]);
+  currentJointConfiguration[1] = DEG2RAD(currentJointConfiguration[1]);
+  currentJointConfiguration[3] = DEG2RAD(currentJointConfiguration[3]);
+
+  vector<vector<double>> trajectoryValues;
+  planPathBasedOnJointSpace(currentJointConfiguration, A_positionVar, B_positionVar, C_positionVar, G_positionVar, trajectoryTime);
+
+}
+
+void planPathBasedOnJointSpace(JOINT& currentJointConfiguration, JOINT& A_positionVar, JOINT& B_positionVar, JOINT& C_positionVar, JOINT& G_positionVar, double trajectoryTime) {
+
+
+  // Current to A
+  JOINT nearSolution_A, farSolution_A;
+  bool flagFirst = false, flagSecond = false;
+  getSolutionsForInverseKIN(A_positionVar, currentJointConfiguration, nearSolution_A, farSolution_A, flagFirst, flagSecond);
+  if (!flagFirst && !flagSecond) {
+    cout << "Error: A is out of workspace!" << endl;
+    return;
+  }
+
+  // A to B
+  JOINT nearSolution_B, farSolution_B;
+
+  getSolutionsForInverseKIN(B_positionVar, nearSolution_A, nearSolution_B, farSolution_B, flagFirst, flagSecond);
+  if (!flagFirst && !flagSecond) {
+    cout << "Error: B is out of workspace!" << endl;
+    return;
+  }
+
+  // B to C
+  JOINT nearSolution_C, farSolution_C;
+  getSolutionsForInverseKIN(C_positionVar, nearSolution_B, nearSolution_C, farSolution_C, flagFirst, flagSecond);
+  if (!flagFirst && !flagSecond) {
+    cout << "Error: C is out of workspace!" << endl;
+    return;
+  }
+
+  // C to G
+  JOINT nearSolution_G, farSolution_G;
+  getSolutionsForInverseKIN(G_positionVar, nearSolution_C, nearSolution_G, farSolution_G, flagFirst, flagSecond);
+  if (!flagFirst && !flagSecond) {
+    cout << "Error: G is out of workspace!" << endl;
+    return;
+  }
+
+  if (DEBUG_TRAJECTORY_PLANNING) {
+    printf("\n--Joint Values (theta1, theta2, d3, theta4)--\n");
+    cout << "Current Joint: " << currentJointConfiguration[0] << " | " << currentJointConfiguration[1] << " | " << currentJointConfiguration[2] << " | " << currentJointConfiguration[3] << endl;
+    cout << "Near Solution A" << nearSolution_A[0] << " | " << nearSolution_A[1] << " | " << nearSolution_A[2] << " | " << nearSolution_A[3] << endl;
+    cout << "Near Solution B" << nearSolution_B[0] << " | " << nearSolution_B[1] << " | " << nearSolution_B[2] << " | " << nearSolution_B[3] << endl;
+    cout << "Near Solution C: " << nearSolution_C[0] << " | " << nearSolution_C[1] << " | " << nearSolution_C[2] << " | " << nearSolution_C[3] << endl;
+    cout << "Near Solution G: " << nearSolution_G[0] << " | " << nearSolution_G[1] << " | " << nearSolution_G[2] << " | " << nearSolution_G[3] << endl;
+  }
+
+  arrayOf5 trajectoryTimeSegments = { trajectoryTime * 0, trajectoryTime * 0.25, trajectoryTime * 0.5, trajectoryTime * 0.75, trajectoryTime * 1 };
+  cout << "\n***** Trajectory time segments based on User trajectory time *****\n\t";
+  cout << "Segments: " << trajectoryTimeSegments[0] << " | " << trajectoryTimeSegments[1] << " | " << trajectoryTimeSegments[2] << " | " << trajectoryTimeSegments[3] << " | " << trajectoryTimeSegments[4] << endl;
+
+  /*
+  * We have all of the joint values for positions: A, B, C, G
+  * Computing the Coefficients in Cubic Polynomials for each of the joint values
+
+  CurrentConfig: {theta1, theta2, d3, theta3}
+  A: {theta1, theta2, d3, theta3}
+  B: {theta1, theta2, d3, theta3}
+  C: {theta1, theta2, d3, theta3}
+  G: {theta1, theta2, d3, theta3}
+
+  to
+
+  jointArr_theta1 = CurrentConfig_theta1, A_theta1, B_theta1. C_theta1, G_theta1
+  jointArr_theta2 = CurrentConfig_theta2, A_theta2, B_theta2. C_theta2, G_theta2
+  jointArr_d3 = CurrentConfig_d3, A_d3, B_d3, C_d3, G_d3
+  jointArr_theta4 = CurrentConfig_theta4, A_theta4, B_theta4, C_theta4, G_theta4
+
+  */
+  arrayOf5 jointArr_theta1, jointArr_theta2, jointArr_d3, jointArr_theta4;
+  prepareJointParamForEachFrames(currentJointConfiguration, nearSolution_A, nearSolution_B, nearSolution_C, nearSolution_G, jointArr_theta1, jointArr_theta2, jointArr_d3, jointArr_theta4);
+
+  vector<vector<double>> currJConfig2A_coeff, A2B_coeff, B2C_coeff, C2G_coeff;
+  JOINT currJConfig2A_coeff_1, A2B_coeff_1, B2C_coeff_1, C2G_coeff_1;
+  calculateCoefficients(jointArr_theta1, trajectoryTimeSegments, currJConfig2A_coeff_1, A2B_coeff_1, B2C_coeff_1, C2G_coeff_1);
+
+
+  JOINT currJConfig2A_coeff_2, A2B_coeff_2, B2C_coeff_2, C2G_coeff_2;
+  calculateCoefficients(jointArr_theta2, trajectoryTimeSegments, currJConfig2A_coeff_2, A2B_coeff_2, B2C_coeff_2, C2G_coeff_2);
+
+  JOINT currJConfig2A_coeff_3, A2B_coeff_3, B2C_coeff_3, C2G_coeff_3;
+  calculateCoefficients(jointArr_d3, trajectoryTimeSegments, currJConfig2A_coeff_3, A2B_coeff_3, B2C_coeff_3, C2G_coeff_3);
+
+  JOINT currJConfig2A_coeff_4, A2B_coeff_4, B2C_coeff_4, C2G_coeff_4;
+  calculateCoefficients(jointArr_theta4, trajectoryTimeSegments, currJConfig2A_coeff_4, A2B_coeff_4, B2C_coeff_4, C2G_coeff_4);
+
+  currJConfig2A_coeff.push_back(vector<double>(currJConfig2A_coeff_1, currJConfig2A_coeff_1 + 4));
+  currJConfig2A_coeff.push_back(vector<double>(currJConfig2A_coeff_2, currJConfig2A_coeff_2 + 4));
+  currJConfig2A_coeff.push_back(vector<double>(currJConfig2A_coeff_3, currJConfig2A_coeff_3 + 4));
+  currJConfig2A_coeff.push_back(vector<double>(currJConfig2A_coeff_4, currJConfig2A_coeff_4 + 4));
+
+  A2B_coeff.push_back(vector<double>(A2B_coeff_1, A2B_coeff_1 + 4));
+  A2B_coeff.push_back(vector<double>(A2B_coeff_2, A2B_coeff_2 + 4));
+  A2B_coeff.push_back(vector<double>(A2B_coeff_3, A2B_coeff_3 + 4));
+  A2B_coeff.push_back(vector<double>(A2B_coeff_4, A2B_coeff_4 + 4));
+
+  B2C_coeff.push_back(vector<double>(B2C_coeff_1, B2C_coeff_1 + 4));
+  B2C_coeff.push_back(vector<double>(B2C_coeff_2, B2C_coeff_2 + 4));
+  B2C_coeff.push_back(vector<double>(B2C_coeff_3, B2C_coeff_3 + 4));
+  B2C_coeff.push_back(vector<double>(B2C_coeff_4, B2C_coeff_4 + 4));
+
+  C2G_coeff.push_back(vector<double>(C2G_coeff_1, C2G_coeff_1 + 4));
+  C2G_coeff.push_back(vector<double>(C2G_coeff_2, C2G_coeff_2 + 4));
+  C2G_coeff.push_back(vector<double>(C2G_coeff_3, C2G_coeff_3 + 4));
+  C2G_coeff.push_back(vector<double>(C2G_coeff_4, C2G_coeff_4 + 4));
+
+
+  if (DEBUG_TRAJECTORY_PLANNING) {
+    printf("\n--Cubic Coefficients (a0, a1, a2, a3)--\n");
+    displayJointVar(currJConfig2A_coeff, A2B_coeff, B2C_coeff, C2G_coeff);
+  }
+  vector<double> currTimeVec;
+  vector<vector<double>> pathVec;
+  generatePath(trajectoryTimeSegments, currJConfig2A_coeff, A2B_coeff, B2C_coeff, C2G_coeff, pathVec, currTimeVec);
+
+  vector<vector<double>> velocityVec;
+  generateVelocity(trajectoryTimeSegments, currJConfig2A_coeff, A2B_coeff, B2C_coeff, C2G_coeff, velocityVec, currTimeVec);
+
+
+}
+void generateVelocity(arrayOf5& timeArr, vector<vector<double>>& currJConfig2A_coeff, vector<vector<double>>& A2B_coeff, vector<vector<double>>& B2C_coeff, vector<vector<double>>& C2G_coeff, vector<vector<double>>& velocityVec, vector<double>& currTimeVec) {
+
+  vector<double> theta1_vel, theta2_vel, d3_vel, theta4_vel;
+
+  for (int i = 0; i < 4; i++) {
+
+    switch (i)
+    {
+    case 0:
+      genVelocityHelperFunction(timeArr[0], timeArr[1], currJConfig2A_coeff[i], theta1_vel, currTimeVec, false);
+      genVelocityHelperFunction(timeArr[1], timeArr[2], A2B_coeff[i], theta1_vel, currTimeVec, false);
+      genVelocityHelperFunction(timeArr[2], timeArr[3], B2C_coeff[i], theta1_vel, currTimeVec, false);
+      genVelocityHelperFunction(timeArr[3], timeArr[4], C2G_coeff[i], theta1_vel, currTimeVec, false);
+      velocityVec.push_back(theta1_vel);
+      break;
+    case 1:
+      genVelocityHelperFunction(timeArr[0], timeArr[1], currJConfig2A_coeff[i], theta2_vel, currTimeVec, true);
+      genVelocityHelperFunction(timeArr[1], timeArr[2], A2B_coeff[i], theta2_vel, currTimeVec, true);
+      genVelocityHelperFunction(timeArr[2], timeArr[3], B2C_coeff[i], theta2_vel, currTimeVec, true);
+      genVelocityHelperFunction(timeArr[3], timeArr[4], C2G_coeff[i], theta2_vel, currTimeVec, true);
+      velocityVec.push_back(theta2_vel);
+      break;
+    case 2:
+      genVelocityHelperFunction(timeArr[0], timeArr[1], currJConfig2A_coeff[i], d3_vel, currTimeVec, true);
+      genVelocityHelperFunction(timeArr[1], timeArr[2], A2B_coeff[i], d3_vel, currTimeVec, true);
+      genVelocityHelperFunction(timeArr[2], timeArr[3], B2C_coeff[i], d3_vel, currTimeVec, true);
+      genVelocityHelperFunction(timeArr[3], timeArr[4], C2G_coeff[i], d3_vel, currTimeVec, true);
+      velocityVec.push_back(d3_vel);
+      break;
+    case 3:
+      genVelocityHelperFunction(timeArr[0], timeArr[1], currJConfig2A_coeff[i], theta4_vel, currTimeVec, true);
+      genVelocityHelperFunction(timeArr[1], timeArr[2], A2B_coeff[i], theta4_vel, currTimeVec, true);
+      genVelocityHelperFunction(timeArr[2], timeArr[3], B2C_coeff[i], theta4_vel, currTimeVec, true);
+      genVelocityHelperFunction(timeArr[3], timeArr[4], C2G_coeff[i], theta4_vel, currTimeVec, true);
+      velocityVec.push_back(theta4_vel);
+      break;
+    }
+  }
+
+}
+
+void genVelocityHelperFunction(double ti, double tf, vector<double>& coeff, vector<double>& vel, vector<double>& currTimeVec, bool isFull) {
+  // Computes the velocity of the path vs. time
+  // Units: rad/s
+  double t = tf - ti;
+  int num_points = (t * sample_rate) + 1; // + 2 to get the final position as well
+  for (int i = 0; i < num_points; i++) {
+    if (isFull == false) currTimeVec.push_back(ti + i / sample_rate);
+    vel.push_back(coeff[1] + 2 * coeff[2] * currTimeVec[i] + 3 * coeff[3] * pow(currTimeVec[i], 2));
+    //vel.push_back(coeff[1] + 2*coeff[2]*curr_time[i] + 3*coeff[3]*pow(curr_time[i], 2) + 4*coeff[4]*pow(curr_time[i], 3) + 5*coeff[5]*pow(curr_time[i], 4));
+  }
+
+}
+
+void generatePath(arrayOf5& timeArr, vector<vector<double>>& currJConfig2A_coeff, vector<vector<double>>& A2B_coeff, vector<vector<double>>& B2C_coeff, vector<vector<double>>& C2G_coeff, vector<vector<double>>& pathVector, vector<double>& currTimeVec) {
+
+
+  vector<double> theta1_pos, theta2_pos, d3_pos, theta4_pos;
+
+  for (int i = 0; i < 4; i++) {
+
+    switch (i)
+    {
+    case 0:
+      genPathHelperFunction(timeArr[0], timeArr[1], currJConfig2A_coeff[i], theta1_pos, currTimeVec, false);
+      genPathHelperFunction(timeArr[1], timeArr[2], A2B_coeff[i], theta1_pos, currTimeVec, false);
+      genPathHelperFunction(timeArr[2], timeArr[3], B2C_coeff[i], theta1_pos, currTimeVec, false);
+      genPathHelperFunction(timeArr[3], timeArr[4], C2G_coeff[i], theta1_pos, currTimeVec, false);
+      pathVector.push_back(theta1_pos);
+      break;
+    case 1:
+      genPathHelperFunction(timeArr[0], timeArr[1], currJConfig2A_coeff[i], theta2_pos, currTimeVec, true);
+      genPathHelperFunction(timeArr[1], timeArr[2], A2B_coeff[i], theta2_pos, currTimeVec, true);
+      genPathHelperFunction(timeArr[2], timeArr[3], B2C_coeff[i], theta2_pos, currTimeVec, true);
+      genPathHelperFunction(timeArr[3], timeArr[4], C2G_coeff[i], theta2_pos, currTimeVec, true);
+      pathVector.push_back(theta2_pos);
+      break;
+    case 2:
+      genPathHelperFunction(timeArr[0], timeArr[1], currJConfig2A_coeff[i], d3_pos, currTimeVec, true);
+      genPathHelperFunction(timeArr[1], timeArr[2], A2B_coeff[i], d3_pos, currTimeVec, true);
+      genPathHelperFunction(timeArr[2], timeArr[3], B2C_coeff[i], d3_pos, currTimeVec, true);
+      genPathHelperFunction(timeArr[3], timeArr[4], C2G_coeff[i], d3_pos, currTimeVec, true);
+      pathVector.push_back(d3_pos);
+      break;
+    case 3:
+      genPathHelperFunction(timeArr[0], timeArr[1], currJConfig2A_coeff[i], theta4_pos, currTimeVec, true);
+      genPathHelperFunction(timeArr[1], timeArr[2], A2B_coeff[i], theta4_pos, currTimeVec, true);
+      genPathHelperFunction(timeArr[2], timeArr[3], B2C_coeff[i], theta4_pos, currTimeVec, true);
+      genPathHelperFunction(timeArr[3], timeArr[4], C2G_coeff[i], theta4_pos, currTimeVec, true);
+      pathVector.push_back(theta4_pos);
+      break;
+    }
+  }
+
+}
+
+void genPathHelperFunction(double ti, double tf, vector<double>& coeff, vector<double>& pos, vector<double>& currTimeVec, bool isFull) {
+  /* Computes the position of the path, theta(t)
+    Input:
+      - ti: initial time for cubic spline
+      - tf: final time for cubic spline
+      - sample_rate: how frequent we want to compute values
+      - coeff: the cubic spline coefficients
+      - theta: position values passed by reference (y axis)
+      - currTimeVec: time values passed by reference (x axis)
+      - isFull: To stop currTimeVec vector from filling, default value False
+    Output:
+      - pos (y, t): the output positions
+  */
+  double t = tf - ti;
+  int num_points = (t * sample_rate) + 1; // + 2 to get the final position as well
+  for (double i = 0; i < num_points; i++) {
+    if (isFull == false) currTimeVec.push_back(ti + i / sample_rate);
+    pos.push_back(coeff[0] + coeff[1] * currTimeVec[i] + coeff[2] * pow(currTimeVec[i], 2) + coeff[3] * pow(currTimeVec[i], 3));
+  }
+}
+
+void displayJointVar(vector<vector<double>>& currJConfig2A_coeff, vector<vector<double>>& A2B_coeff, vector<vector<double>>& B2C_coeff, vector<vector<double>>& C2G_coeff) {
+  for (int i = 0; i < 4; i++) {
+
+    switch (i)
+    {
+    case 0:
+      cout << "******* Coefficients For 'Theta 1' *******\n";
+      break;
+    case 1:
+      cout << "******* Coefficients For 'Theta 2' *******\n";
+      break;
+    case 2:
+      cout << "******* Coefficients For 'D3' *******\n";
+      break;
+    case 3:
+      cout << "******* Coefficients For 'Theta 4' *******\n";
+      break;
+    }
+    cout << "\tStart to A : [" << currJConfig2A_coeff[i][0] << " | " << currJConfig2A_coeff[i][1] << " | " << currJConfig2A_coeff[i][2] << " | " << currJConfig2A_coeff[i][3] << endl;
+    cout << "\tA to B : [" << A2B_coeff[i][0] << " | " << A2B_coeff[i][1] << " | " << A2B_coeff[i][2] << " | " << A2B_coeff[i][3] << endl;
+    cout << "\tB to C : [" << B2C_coeff[i][0] << " | " << B2C_coeff[i][1] << " | " << B2C_coeff[i][2] << " | " << B2C_coeff[i][3] << endl;
+    cout << "\tC to D : [" << C2G_coeff[i][0] << " | " << C2G_coeff[i][1] << " | " << C2G_coeff[i][2] << " | " << C2G_coeff[i][3] << endl;
+  }
+}
+
+void calculateCoefficients(arrayOf5& jointParamArr, arrayOf5& trajectoryTimeSegments, JOINT& currJConfig2A_coeff, JOINT& A2B_coeff, JOINT& B2C_coeff, JOINT& C2G_coeff) {
+  // takes the joint values, and computes the cubic coefficients between subsequent 
+  // joint values
+  // Assumes Curr -> A -> B -> C -> G
+  // compute the slopes of each line segment
+  arrayOf4 slopes;
+
+  arrayOf4 diffTrajectoryTimeSegments{ trajectoryTimeSegments[1] - trajectoryTimeSegments[0], trajectoryTimeSegments[2] - trajectoryTimeSegments[1], trajectoryTimeSegments[3] - trajectoryTimeSegments[2], trajectoryTimeSegments[4] - trajectoryTimeSegments[3] };
+
+  // computes the slope of the line segment
+  int sz = sizeof(slopes) / sizeof(*slopes);
+  for (int i = 0; i < sz; i++) {
+    slopes[i] = (jointParamArr[i + 1] - jointParamArr[i]) / (trajectoryTimeSegments[i + 1] - trajectoryTimeSegments[i]);
+  }
+
+
+  /* computes the velocity at each via point
+  - if slope's sign change, vel = 0
+  - if slope's sign does not change, vel = average of two slopes */
+  arrayOf3 temp1;
+  int sz = sizeof(temp1) / sizeof(*temp1);
+  for (int i = 0; i < sz; i++) {
+    if (slopes[i] > 0 && slopes[i + 1] < 0 || slopes[i] < 0 && slopes[i + 1] > 0) {
+      temp1[i] = 0;
+    }
+    else {
+      temp1[i] = (slopes[i] + slopes[i + 1]) / 2;
+    }
+  }
+  arrayOf5 vels{ 0 , temp1[0], temp1[1],  temp1[2], 0 };
+
+  // curr -> A
+  calculateCubicCoefficients(jointParamArr[0], jointParamArr[1], vels[0], vels[1], diffTrajectoryTimeSegments[0], currJConfig2A_coeff);
+
+  // A -> B
+  calculateCubicCoefficients(jointParamArr[1], jointParamArr[2], vels[1], vels[2], diffTrajectoryTimeSegments[1], A2B_coeff);
+
+  // B -> C
+  calculateCubicCoefficients(jointParamArr[2], jointParamArr[3], vels[2], vels[3], diffTrajectoryTimeSegments[2], B2C_coeff);
+
+  // C -> G
+  calculateCubicCoefficients(jointParamArr[3], jointParamArr[4], vels[3], vels[4], diffTrajectoryTimeSegments[3], C2G_coeff);
+}
+
+void calculateCubicCoefficients(double theta0, double thetaf, double vel0, double velf, double tf, JOINT& coeff) {
+
+  // Calculates the cubic coefficients
+  // Assumes constant velocity between points
+  // See eqn 7.11 of text (pg 207 of text OR 215/408 of pdfr)
+
+  double a0, a1, a2, a3;
+  a0 = theta0;
+  a1 = vel0;
+  a2 = (3 / pow(tf, 2)) * (thetaf - theta0) - (2 / tf) * vel0 - (1 / tf) * velf;
+  a3 = -(2 / pow(tf, 3)) * (thetaf - theta0) + (1 / pow(tf, 2)) * (velf + vel0);
+
+  JOINT tempJointArr{ a0, a1, a2, a3 };
+  copyArray(tempJointArr, coeff);
+}
+
+void prepareJointParamForEachFrames(JOINT& currentJointConfiguration, JOINT& nearSolution_A, JOINT& nearSolution_B, JOINT& nearSolution_C, JOINT& nearSolution_G, arrayOf5& jointArr_theta1, arrayOf5& jointArr_theta2, arrayOf5& jointArr_d3, arrayOf5& jointArr_theta4) {
+
+  seprateJointParametersPerIndex(jointArr_theta1, currentJointConfiguration, nearSolution_A, nearSolution_B, nearSolution_C, nearSolution_G, 0);
+  seprateJointParametersPerIndex(jointArr_theta2, currentJointConfiguration, nearSolution_A, nearSolution_B, nearSolution_C, nearSolution_G, 1);
+  seprateJointParametersPerIndex(jointArr_d3, currentJointConfiguration, nearSolution_A, nearSolution_B, nearSolution_C, nearSolution_G, 2);
+  seprateJointParametersPerIndex(jointArr_theta4, currentJointConfiguration, nearSolution_A, nearSolution_B, nearSolution_C, nearSolution_G, 3);
+
+
+  if (DEBUG_TRAJECTORY_PLANNING) {
+    cout << "\n***** Joint Values (Theta1, Theta2, D3, Theta4) *****\n\t";
+    cout << "jointArr_theta1: " << jointArr_theta1[0] << " | " << jointArr_theta1[1] << " | " << jointArr_theta1[2] << " | " << jointArr_theta1[3] << " | " << jointArr_theta1[4] << endl << "\t";
+    cout << "jointArr_theta2" << jointArr_theta2[0] << " | " << jointArr_theta2[1] << " | " << jointArr_theta2[2] << " | " << jointArr_theta2[3] << " | " << jointArr_theta2[4] << endl << "\t";
+    cout << "jointArr_d3" << jointArr_d3[0] << " | " << jointArr_d3[1] << " | " << jointArr_d3[2] << " | " << jointArr_d3[3] << " | " << jointArr_d3[4] << endl << "\t";
+    cout << "jointArr_theta4" << jointArr_theta4[0] << " | " << jointArr_theta4[1] << " | " << jointArr_theta4[2] << " | " << jointArr_theta4[3] << " | " << jointArr_theta4[4] << endl << "\t";
+  }
+
+}
+
+// Forward Kinematics #################################################################################################################
 void KIN(JOINT& jointVar, transformMatrix& writstRelativeBaseT) {
 
   double theta1 = jointVar[0];
@@ -172,9 +565,9 @@ void forwardKinematics(JOINT& jointVariables, JOINT& sPt_toolPostionWRTStation) 
 
   return;
 }
-//############################################################################################################################################################
+//#####################################################################################################################################
 
-// Inverse Kinematics ############################################################################################################################################################
+// Inverse Kinematics #################################################################################################################
 bool inverseKinematics(JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp, uint8_t isItPickAndPlace) {
 
   printf("\n\n****************************************\nInverse Kinematics\n****************************************\n\n");
@@ -182,9 +575,12 @@ bool inverseKinematics(JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp, 
   // All angles are in degrees
   double x, y, z, phi;
   bool isValid = false;
+
+
   if (!isItAFollowUp)
   {
-    getToolPositionFromUser(x, y, z, phi);
+    char tempString[] = "**Please, Enter Tool Position With Respect To Base[X, Y, Z, phi] **";
+    getToolPositionFromUser(x, y, z, phi, tempString);
     printf("Entered Inputs: [%f , %f , %f , %f (Deg)]\n", x, y, z, phi);
   }
   else
@@ -201,8 +597,6 @@ bool inverseKinematics(JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp, 
       phi = RAD2DEG(sPt_toolPostionWRTStation[3]);
       printf("Calculated Inputs for Inverse Kinematics: [%f , %f , %f , %f (Deg)]\n", x, y, z, phi);
     }
-
-
   }
 
   JOINT toolPosition{ x, y, z, DEG2RAD(phi) };
@@ -426,18 +820,21 @@ bool getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, J
   }
   return 1;
 }
-//############################################################################################################################################################
+//#####################################################################################################################################
 
 // Pick And Place #####################################################################
 void runPickAndPlace() {
   printf("\n\n****************************************\nRunning Pick and Place\n****************************************\n\n");
+
   cout << "Please Enter the first target's parameters [X,Y,Z,PHI]\n";
   double x_1, y_1, z_1, phi_1;
-  getToolPositionFromUser(x_1, y_1, z_1, phi_1);
+  char tempString[] = "**[First Target] Please, Enter Tool Position With Respect To Base[X, Y, Z, phi] **";
+  getToolPositionFromUser(x_1, y_1, z_1, phi_1, tempString);
 
+  strcpy_s(tempString, "**[Second Target] Please, Enter Tool Position With Respect To Base[X, Y, Z, phi] **");
   cout << "Please Enter the Second target's parameters [X,Y,Z,PHI]\n";
   double x_2, y_2, z_2, phi_2;
-  getToolPositionFromUser(x_2, y_2, z_2, phi_2);
+  getToolPositionFromUser(x_2, y_2, z_2, phi_2, tempString);
 
   JOINT firstLocation{ x_1, y_1, z_1, phi_1 };
   uint8_t status = inverseKinematics(firstLocation, true, true);
@@ -517,8 +914,9 @@ void extractPositionFromTransformMatrix(transformMatrix& transformMatrix, arrayO
   }
 }
 
-void getToolPositionFromUser(double& x, double& y, double& z, double& phi) {
-  cout << "\n** Please, Enter Tool Position With Respect To Base [X,Y,Z,phi]**\n";
+void getToolPositionFromUser(double& x, double& y, double& z, double& phi, char* instructionString) {
+  // ** Please, Enter Tool Position With Respect To Base [X,Y,Z,phi]**
+  cout << "\n" << instructionString << endl;
   printf("\tEnter X in MM :  ");
   cin >> x;
   printf("\tEnter Y in MM :  ");
@@ -530,6 +928,25 @@ void getToolPositionFromUser(double& x, double& y, double& z, double& phi) {
 }
 
 // Helping Hands
+
+void seprateJointParametersPerIndex(arrayOf5& outputJointParam, JOINT& currentJointParam, JOINT& jointAParam, JOINT& jointBParam, JOINT& jointCParam, JOINT& jointGParam, int index) {
+
+  /*
+  if index == 0
+    outputJointParam = CurrentConfig[0], A[0], B[0], C[0], G[0]
+  if index == 1
+    outputJointParam = CurrentConfig[1], A[1], B[1], C[1], G[1]
+  .
+  .
+
+  */
+  outputJointParam[0] = currentJointParam[index];
+  outputJointParam[1] = jointAParam[index];
+  outputJointParam[2] = jointBParam[index];
+  outputJointParam[3] = jointCParam[index];
+  outputJointParam[4] = jointGParam[index];
+}
+
 bool checkIfJointsAreWithinConstraints(JOINT& joinVar) {
 
   double x1 = joinVar[0];
@@ -691,6 +1108,7 @@ void rotationMatrixMultiplication(rotationMatrix& firstMatrix, rotationMatrix& s
     }
   }
 }
+
 void rotationMatrixMultiplication(rotationMatrix& rotationMatrix, arrayOf3& positionVector, arrayOf3& result)
 {
   for (int i = 0; i < 3; i++)

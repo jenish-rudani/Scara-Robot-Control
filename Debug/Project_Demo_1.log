@@ -1,14 +1,14 @@
 ﻿  Source.cpp
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(106,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(107,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(299,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(300,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(302,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(303,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(416,64): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(392,19): warning C4101: 'wrels': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(662,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(663,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(664,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(665,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(251,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(252,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(445,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(446,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(448,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(449,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(562,64): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(538,19): warning C4101: 'wrels': unreferenced local variable
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(831,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(832,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(833,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(834,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   Project_Demo_1.vcxproj -> C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Debug\Project_Demo_1.exe

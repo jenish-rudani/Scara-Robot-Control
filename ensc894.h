@@ -1,12 +1,15 @@
 #pragma once
-#include <stdio.h>
-#include <conio.h>
 #include <iostream>
+#include <stdio.h>
 #include <string>
 #include <math.h>
+#include <vector>
+#include <conio.h>
 #include <fstream>
 #include <chrono>
 #include <algorithm>
+
+
 #include "ensc-488.h"
 #include "StdAfx.h"
 
@@ -38,6 +41,8 @@ typedef double transformMatrix[4][4];
 typedef double rotationMatrix[3][3];
 
 typedef double arrayOf3[3];
+typedef double arrayOf5[5];
+typedef double arrayOf4[4];
 
 int main(void);
 
@@ -49,11 +54,19 @@ bool getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, J
 bool calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOINT& farthestSolution, bool& firstFlag, bool& secondFlag);
 bool inverseKinematics(JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp, uint8_t isItPickAndPlace);
 
+void trajectoryPlanning();
+void planPathBasedOnJointSpace(JOINT& currentJointConfiguration, JOINT& A_positionVar, JOINT& B_positionVar, JOINT& C_positionVar, JOINT& G_positionVar, double trajectoryTime);
+
 bool checkIfJointsAreWithinConstraints(JOINT& joinVar);
 void copyArray(JOINT& inputArray, JOINT& outputArray);
 void getJointParametersFromUser(double& theta_1, double& theta_2, double& d3, double& theta_4);
 void convertJointPramaterAnglesToRadian(double& theta_1, double& theta_2, double d3, double& theta_4, JOINT& jointVariables);
 void toggleGripper(bool& negativeCurrentGripperStatus);
+
+void seprateJointParametersPerIndex(arrayOf5& outputJointParam, JOINT& currentJointParam, JOINT& jointAParam, JOINT& jointBParam, JOINT& jointCParam, JOINT& jointGParam, int index);
+void prepareJointParamForEachFrames(JOINT& currentJointConfiguration, JOINT& nearSolution_A, JOINT& nearSolution_B, JOINT& nearSolution_C, JOINT& nearSolution_G, arrayOf5& jointArr_theta1, arrayOf5& jointArr_theta2, arrayOf5& jointArr_d3, arrayOf5& jointArr_theta4);
+void generatePath(arrayOf5& timeArr, vector<vector<double>>& currJConfig2A_coeff, vector<vector<double>>& A2B_coeff, vector<vector<double>>& B2C_coeff, vector<vector<double>>& C2G_coeff, vector<vector<double>>& pathVector, vector<double>& currTimeVec);
+void generatePath(arrayOf5& timeArr, vector<vector<double>>& currJConfig2A_coeff, vector<vector<double>>& A2B_coeff, vector<vector<double>>& B2C_coeff, vector<vector<double>>& C2G_coeff, vector<vector<double>>& velocityVec, vector<double>& currTimeVec);
 
 
 void getPositionVectorFromTransformMatrix(transformMatrix& tmat, arrayOf3& pos);
@@ -70,7 +83,7 @@ void rotationMatrixMultiplication(rotationMatrix& firstMatrix, rotationMatrix& s
 void rotationMatrixMultiplication(rotationMatrix& rotationMatrix, arrayOf3& positionVector, arrayOf3& result);
 
 void multiplyPositionArrayWithValue(arrayOf3& inputPositionArray, double value, arrayOf3& outputPositionArray);
-void getToolPositionFromUser(double& x, double& y, double& z, double& phi);
+void getToolPositionFromUser(double& x, double& y, double& z, double& phi, char* instructionString);
 void getTransposedMatrix(rotationMatrix& a_R_b, rotationMatrix& b_R_a);
 void extractPositionFromTransformMatrix(transformMatrix& transformMatrix, arrayOf3& excractedPositionVector);
 
