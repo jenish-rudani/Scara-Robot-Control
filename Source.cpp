@@ -4,7 +4,6 @@
 #include <thread>
 
 using namespace std;
-
 /*
 
 ** Important : All Rotations are around Z-axis
@@ -111,65 +110,65 @@ void trajectoryPlanning() {
   cout << "Please, Enter time for Trajectory in Seconds: ";
   cin >> trajectoryTime;
 
-  if (!DEBUG_TRAJECTORY_PLANNING)
-  {
-    char tempString[] = "Please, Enter Parameters for Via Point 'A'";
-    getToolPositionFromUser(x_a, y_a, z_a, phi_a, tempString);
 
-    strcpy_s(tempString, "Please, Enter Parameters Via Point 'B'");
-    getToolPositionFromUser(x_b, y_b, z_b, phi_b, tempString);
+  //A_positionVar[0] = 230;
+  //A_positionVar[1] = 115;
+  //A_positionVar[2] = 50;
+  //A_positionVar[3] = DEG2RAD(0);
 
-    strcpy_s(tempString, "Please, Enter Parameters Via Point 'C'");
-    getToolPositionFromUser(x_c, y_c, z_c, phi_c, tempString);
+  //B_positionVar[0] = 230;
+  //B_positionVar[1] = 0;
+  //B_positionVar[2] = 50;
+  //B_positionVar[3] = DEG2RAD(0);
 
+  //C_positionVar[0] = 230;
+  //C_positionVar[1] = -115;
+  //C_positionVar[2] = 50;
+  //C_positionVar[3] = DEG2RAD(0);
 
-    strcpy_s(tempString, "Please, Enter Parameters for Point 'G'");
-    getToolPositionFromUser(x_g, y_g, z_g, phi_g, tempString);
-
-    JOINT A_positionVar{ x_a, y_a, z_a, DEG2RAD(phi_a) };
-    JOINT B_positionVar{ x_b, y_b, z_b, DEG2RAD(phi_b) };
-    JOINT C_positionVar{ x_c, y_c, z_c, DEG2RAD(phi_c) };
-    JOINT G_positionVar{ x_g, y_g, z_g, DEG2RAD(phi_g) };
-    cout << "\n\n*******************************************************\n";
-    cout << " -- You have entered following parameters  --\n";
-    cout << "\tFrame:  X   |  Y  |  Z  | phi\n";
-    cout << "\tA:   [ " << A_positionVar[0] << "  | " << A_positionVar[1] << " | " << A_positionVar[2] << " | " << A_positionVar[3] << " ]" << endl;
-    cout << "\tB:   [" << B_positionVar[0] << "  | " << B_positionVar[1] << " | " << B_positionVar[2] << " | " << B_positionVar[3] << " ]" << endl;
-    cout << "\tC:   [" << C_positionVar[0] << "  |" << C_positionVar[1] << " | " << C_positionVar[2] << " | " << C_positionVar[3] << " ]" << endl;
-    cout << "\tG:   [ " << G_positionVar[0] << "  |" << G_positionVar[1] << " | " << G_positionVar[2] << " | " << G_positionVar[3] << " ]" << endl;
-    cout << "*******************************************************\n\n";
-  }
-  else {
-    A_positionVar[0] = 100;
-    A_positionVar[1] = 250;
-    A_positionVar[2] = 100;
-    A_positionVar[3] = 30;
-
-    B_positionVar[0] = -100;
-    B_positionVar[1] = 250;
-    B_positionVar[2] = 100;
-    B_positionVar[3] = 30;
-
-    C_positionVar[0] = -100;
-    C_positionVar[1] = -250;
-    C_positionVar[2] = 100;
-    C_positionVar[3] = 30;
-
-    G_positionVar[0] = 100;
-    G_positionVar[1] = -250;
-    G_positionVar[2] = 100;
-    G_positionVar[3] = 30;
+  //G_positionVar[0] = 230;
+  //G_positionVar[1] = -230;
+  //G_positionVar[2] = 50;
+  //G_positionVar[3] = DEG2RAD(0);
 
 
-    cout << "\n\n*******************************************************\n";
-    cout << " -- You have entered following parameters  --\n";
-    cout << "\tFrame:  X   |  Y  |  Z  | phi\n";
-    cout << "\tA:   [ " << A_positionVar[0] << "  | " << A_positionVar[1] << " | " << A_positionVar[2] << " | " << A_positionVar[3] << " ]" << endl;
-    cout << "\tB:   [" << B_positionVar[0] << "  | " << B_positionVar[1] << " | " << B_positionVar[2] << " | " << B_positionVar[3] << " ]" << endl;
-    cout << "\tC:   [" << C_positionVar[0] << "  |" << C_positionVar[1] << " | " << C_positionVar[2] << " | " << C_positionVar[3] << " ]" << endl;
-    cout << "\tG:   [ " << G_positionVar[0] << "  |" << G_positionVar[1] << " | " << G_positionVar[2] << " | " << G_positionVar[3] << " ]" << endl;
-    cout << "*******************************************************\n\n";
-  }
+
+  // Enter First Via Parameters here
+  A_positionVar[0] = -200;
+  A_positionVar[1] = 200;
+  A_positionVar[2] = 120;
+  A_positionVar[3] = DEG2RAD(25);
+
+  // Enter Second Via Parameters here
+  B_positionVar[0] = 290;
+  B_positionVar[1] = 0;
+  B_positionVar[2] = 90;
+  B_positionVar[3] = DEG2RAD(30);
+
+  // Enter Third Via Parameters here
+  C_positionVar[0] = 300;
+  C_positionVar[1] = -100;
+  C_positionVar[2] = 40;
+  C_positionVar[3] = DEG2RAD(40);
+
+  // Enter Goal Position Parameters here
+  G_positionVar[0] = -100;
+  G_positionVar[1] = -200;
+  G_positionVar[2] = 25;
+  G_positionVar[3] = DEG2RAD(-80);
+
+
+
+
+  cout << "\n\n*******************************************************\n";
+  cout << " -- You have entered following parameters  --\n";
+  cout << "\tFrame:  X   |  Y  |  Z  | phi\n";
+  cout << "\tA:   [ " << A_positionVar[0] << "  | " << A_positionVar[1] << " | " << A_positionVar[2] << " | " << RAD2DEG(A_positionVar[3]) << " ]" << endl;
+  cout << "\tB:   [" << B_positionVar[0] << "  | " << B_positionVar[1] << " | " << B_positionVar[2] << " | " << RAD2DEG(B_positionVar[3]) << " ]" << endl;
+  cout << "\tC:   [" << C_positionVar[0] << "  |" << C_positionVar[1] << " | " << C_positionVar[2] << " | " << RAD2DEG(C_positionVar[3]) << " ]" << endl;
+  cout << "\tG:   [ " << G_positionVar[0] << "  |" << G_positionVar[1] << " | " << G_positionVar[2] << " | " << RAD2DEG(G_positionVar[3]) << " ]" << endl;
+  cout << "*******************************************************\n\n";
+
 
 
   JOINT currentJointConfiguration; // get the current joint values of the robotic arm
@@ -184,6 +183,7 @@ void trajectoryPlanning() {
 
 void planPathBasedOnJointSpace(JOINT& currentJointConfiguration, JOINT& A_positionVar, JOINT& B_positionVar, JOINT& C_positionVar, JOINT& G_positionVar, double trajectoryTime) {
 
+  printf("\n\n Current Config 1: %f |  2: %f |  d3: %f | 4: %f", RAD2DEG(currentJointConfiguration[0]), RAD2DEG(currentJointConfiguration[1]), (currentJointConfiguration[2]), RAD2DEG(currentJointConfiguration[3]));
 
 
   // Current to A
@@ -198,6 +198,7 @@ void planPathBasedOnJointSpace(JOINT& currentJointConfiguration, JOINT& A_positi
   // A to B
   JOINT nearSolution_B, farSolution_B;
   flagFirst = false, flagSecond = false;
+
   getSolutionsForInverseKIN(B_positionVar, nearSolution_A, nearSolution_B, farSolution_B, flagFirst, flagSecond);
   if (!flagFirst && !flagSecond) {
     cout << "Error: B is out of workspace!" << endl;
@@ -216,20 +217,30 @@ void planPathBasedOnJointSpace(JOINT& currentJointConfiguration, JOINT& A_positi
   // C to G
   JOINT nearSolution_G, farSolution_G;
   flagFirst = false, flagSecond = false;
-  getSolutionsForInverseKIN(G_positionVar, nearSolution_C, nearSolution_G, farSolution_G, flagFirst, flagSecond);
+  getSolutionsForInverseKIN(G_positionVar, nearSolution_C, farSolution_G, nearSolution_G, flagFirst, flagSecond);
   if (!flagFirst && !flagSecond) {
     cout << "Error: G is out of workspace!" << endl;
     return;
   }
 
+
   if (DEBUG_TRAJECTORY_PLANNING) {
     cout << "\n\n*******************************************************************\n";
     cout << " -- Joint Values in Order : " << " Theta1 | " << "Theta2 | " << "D3 |" << " Theta4  --" << endl;
-    cout << "\tCurrent Joint  : " << currentJointConfiguration[0] << " | " << currentJointConfiguration[1] << " | " << currentJointConfiguration[2] << " | " << currentJointConfiguration[3] << endl;
-    cout << "\tNear Solution A: " << nearSolution_A[0] << " | " << nearSolution_A[1] << " | " << nearSolution_A[2] << " | " << nearSolution_A[3] << endl;
-    cout << "\tNear Solution B: " << nearSolution_B[0] << " | " << nearSolution_B[1] << " | " << nearSolution_B[2] << " | " << nearSolution_B[3] << endl;
-    cout << "\tNear Solution C: " << nearSolution_C[0] << " | " << nearSolution_C[1] << " | " << nearSolution_C[2] << " | " << nearSolution_C[3] << endl;
-    cout << "\tNear Solution G: " << nearSolution_G[0] << " | " << nearSolution_G[1] << " | " << nearSolution_G[2] << " | " << nearSolution_G[3] << endl;
+
+    cout << "\tCurrent Joint  : " << RAD2DEG(currentJointConfiguration[0]) << " | " << RAD2DEG(currentJointConfiguration[1]) << " | " << currentJointConfiguration[2] << " | " << RAD2DEG(currentJointConfiguration[3]) << endl;
+    cout << "\tNear Solution A: " << RAD2DEG(nearSolution_A[0]) << " | " << RAD2DEG(nearSolution_A[1]) << " | " << (nearSolution_A[2]) << " | " << RAD2DEG(nearSolution_A[3]) << endl;
+    cout << "\tFar Solution A: " << RAD2DEG(farSolution_A[0]) << " | " << RAD2DEG(farSolution_A[1]) << " | " << (farSolution_A[2]) << " | " << RAD2DEG(farSolution_A[3]) << endl;
+
+    cout << "\tNear Solution B: " << RAD2DEG(nearSolution_B[0]) << " | " << RAD2DEG(nearSolution_B[1]) << " | " << (nearSolution_B[2]) << " | " << RAD2DEG(nearSolution_B[3]) << endl;
+    cout << "\tFar Solution B: " << RAD2DEG(farSolution_B[0]) << " | " << RAD2DEG(farSolution_B[1]) << " | " << (farSolution_B[2]) << " | " << RAD2DEG(farSolution_B[3]) << endl;
+
+    cout << "\tNear Solution C: " << RAD2DEG(nearSolution_C[0]) << " | " << RAD2DEG(nearSolution_C[1]) << " | " << (nearSolution_C[2]) << " | " << RAD2DEG(nearSolution_C[3]) << endl;
+    cout << "\tFar Solution C: " << RAD2DEG(farSolution_C[0]) << " | " << RAD2DEG(farSolution_C[1]) << " | " << (farSolution_C[2]) << " | " << RAD2DEG(farSolution_C[3]) << endl;
+
+    cout << "\tNear Solution G: " << RAD2DEG(nearSolution_G[0]) << " | " << RAD2DEG(nearSolution_G[1]) << " | " << (nearSolution_G[2]) << " | " << RAD2DEG(nearSolution_G[3]) << endl;
+    cout << "\tFar Solution G: " << RAD2DEG(farSolution_G[0]) << " | " << RAD2DEG(farSolution_G[1]) << " | " << (farSolution_G[2]) << " | " << RAD2DEG(farSolution_G[3]) << endl;
+
     cout << "*******************************************************************\n\n";
   }
 
@@ -655,16 +666,16 @@ void displayJointVar(vector<vector<double>>& currJConfig2A_coeff, vector<vector<
     switch (i)
     {
     case 0:
-      cout << "******* Coefficients For 'Theta 1' *******\n";
+      cout << "\n\t******* Coefficients For 'Theta 1' *******\n\n";
       break;
     case 1:
-      cout << "******* Coefficients For 'Theta 2' *******\n";
+      cout << "\n\t******* Coefficients For 'Theta 2' *******\n\n";
       break;
     case 2:
-      cout << "******* Coefficients For 'D3' *******\n";
+      cout << "\n\t******* Coefficients For 'D3' *******\n\n";
       break;
     case 3:
-      cout << "******* Coefficients For 'Theta 4' *******\n";
+      cout << "\n\t******* Coefficients For 'Theta 4' *******\n\n";
       break;
     }
     cout << "\tS to A : [" << currJConfig2A_coeff[i][0] << " , " << currJConfig2A_coeff[i][1] << " , " << currJConfig2A_coeff[i][2] << " , " << currJConfig2A_coeff[i][3] << " ]" << endl;
@@ -742,10 +753,10 @@ void prepareJointParamForEachFrames(JOINT& currentJointConfiguration, JOINT& nea
 
     cout << "\n\n*******************************************************************\n";
     cout << "  -- Combined Joint Values from all Frames --\n";
-    cout << "\tTheta1: " << jointArr_theta1[0] << " | " << jointArr_theta1[1] << " | " << jointArr_theta1[2] << " | " << jointArr_theta1[3] << " | " << jointArr_theta1[4] << endl;
-    cout << "\tTheta2: " << jointArr_theta2[0] << " | " << jointArr_theta2[1] << " | " << jointArr_theta2[2] << " | " << jointArr_theta2[3] << " | " << jointArr_theta2[4] << endl;
+    cout << "\tTheta1: " << RAD2DEG(jointArr_theta1[0]) << " | " << RAD2DEG(jointArr_theta1[1]) << " | " << RAD2DEG(jointArr_theta1[2]) << " | " << RAD2DEG(jointArr_theta1[3]) << " | " << RAD2DEG(jointArr_theta1[4]) << endl;
+    cout << "\tTheta2: " << RAD2DEG(jointArr_theta2[0]) << " | " << RAD2DEG(jointArr_theta2[1]) << " | " << RAD2DEG(jointArr_theta2[2]) << " | " << RAD2DEG(jointArr_theta2[3]) << " | " << RAD2DEG(jointArr_theta2[4]) << endl;
     cout << "\tD3    : " << jointArr_d3[0] << " | " << jointArr_d3[1] << " | " << jointArr_d3[2] << " | " << jointArr_d3[3] << " | " << jointArr_d3[4] << endl;
-    cout << "\tTheta4: " << jointArr_theta4[0] << " | " << jointArr_theta4[1] << " | " << jointArr_theta4[2] << " | " << jointArr_theta4[3] << " | " << jointArr_theta4[4] << endl;
+    cout << "\tTheta4: " << RAD2DEG(jointArr_theta4[0]) << " | " << RAD2DEG(jointArr_theta4[1]) << " | " << RAD2DEG(jointArr_theta4[2]) << " | " << RAD2DEG(jointArr_theta4[3]) << " | " << RAD2DEG(jointArr_theta4[4]) << endl;
     cout << "*******************************************************************\n\n";
   }
 
@@ -878,9 +889,7 @@ bool inverseKinematics(JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp, 
 
   bool firstFlag, secondFlag;
   uint8_t status1 = getSolutionsForInverseKIN(toolPosition, currentJointConfig, firstSolution, secondSolution, firstFlag, secondFlag);
-  if (!status1) {
-    return 0;
-  }
+
   if (!firstFlag && !secondFlag)
   {
     printf("ERROR: (%f, %f, %f, %f)\n", RAD2DEG(secondSolution[0]), RAD2DEG(secondSolution[1]), secondSolution[2], RAD2DEG(secondSolution[3]));
@@ -891,27 +900,27 @@ bool inverseKinematics(JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp, 
 
   else if (firstFlag && !secondFlag)
   {
-    cout << "First Valid Solution:\n";
+    cout << "First Valid Solution:";
     printf("[1st] (%f, %f, %f, %f)\n", RAD2DEG(firstSolution[0]), RAD2DEG(firstSolution[1]), firstSolution[2], RAD2DEG(firstSolution[3]));
 
-    cout << "\n\n$$$$$$$$$$$$$$$$$$$$$$$$\n\nSecond Solution Invalid\n";
+    cout << "\n\n$$$$$$$$$$$$$$$$$$$$$$$$\n\nSecond Solution Invalid :  ";
     printf("[2nd] ERROR: (%f, %f, %f, %f)\n", RAD2DEG(secondSolution[0]), RAD2DEG(secondSolution[1]), secondSolution[2], RAD2DEG(secondSolution[3]));
 
   }
   else if (!firstFlag && secondFlag)
   {
-    cout << "\n\n$$$$$$$$$$$$$$$$$$$$$$$$\n\nFirst Solution Invalid\n";
+    cout << "\n\n$$$$$$$$$$$$$$$$$$$$$$$$\n\nFirst Solution Invalid:  ";
     printf("[1st] ERROR: (%f, %f, %f, %f)\n", RAD2DEG(firstSolution[0]), RAD2DEG(firstSolution[1]), firstSolution[2], RAD2DEG(firstSolution[3]));
 
-    cout << "Second Valid Solution:\n";
+    cout << "Second Valid Solution:  ";
     printf("[2nd] (%f, %f, %f, %f)\n", RAD2DEG(secondSolution[0]), RAD2DEG(secondSolution[1]), secondSolution[2], RAD2DEG(secondSolution[3]));
   }
   else
   {
-    cout << "First Valid Solution:\n";
+    cout << "First Valid Solution:  ";
     printf("[1st] (%f, %f, %f, %f)\n", RAD2DEG(firstSolution[0]), RAD2DEG(firstSolution[1]), firstSolution[2], RAD2DEG(firstSolution[3]));
 
-    cout << "Second Valid Solution:\n";
+    cout << "Second Valid Solution:  ";
     printf("[2nd] (%f, %f, %f, %f)\n\n\n\n", RAD2DEG(secondSolution[0]), RAD2DEG(secondSolution[1]), secondSolution[2], RAD2DEG(secondSolution[3]));
   }
 
@@ -919,6 +928,11 @@ bool inverseKinematics(JOINT& sPt_toolPostionWRTStation, uint8_t isItAFollowUp, 
   firstSolution[0] = RAD2DEG(firstSolution[0]);
   firstSolution[1] = RAD2DEG(firstSolution[1]);
   firstSolution[3] = RAD2DEG(firstSolution[3]);
+
+  //secondSolution[0] = RAD2DEG(secondSolution[0]);
+  //secondSolution[1] = RAD2DEG(secondSolution[1]);
+  //secondSolution[3] = RAD2DEG(secondSolution[3]);
+
   MoveToConfiguration(firstSolution, true);
   return 1;
 }
@@ -939,27 +953,24 @@ bool calculateAllTwoSolutions(transformMatrix& bTw, JOINT& closestSolution, JOIN
   double temp111 = sqrt(pow(x, 2) + pow(y, 2));
   double temp123 = D1_BASE_TO_JOINT2_X + D2_WRIST_TO_JOINT2_X;
 
-  if (!TRAJECTORY_PLANNING) {
 
-  }
-
-  if (abs(temp111 - temp123) < 2)//Checks if there is 1 solution  
-  {
-    double D3;
-    D3 = BASE_TO_JOINT2_Z - STATION_TO_BASE_Z - z;
-    double Theta2 = 0;
-    double Theta1 = atan2(y / (D2_WRIST_TO_JOINT2_X + D1_BASE_TO_JOINT2_X), x / (D2_WRIST_TO_JOINT2_X + D1_BASE_TO_JOINT2_X));
-    double Phi = atan2(sPhi, cPhi);
-    double Theta4 = Phi - Theta1 - Theta2;
-    printf("\n\n*** There is 1 solution and it is: (%f deg, %f deg, %f mm, %f deg) \n", Theta1 * 180 / PI, Theta2 * 180 / PI, D3, Theta4 * 180 / PI);
-    firstFlag = true;
-    secondFlag = true;
-    closestSolution[0] = Theta1;
-    closestSolution[1] = Theta2;
-    closestSolution[2] = D3;
-    closestSolution[3] = Theta4;
-    return 0;
-  }
+  //if (abs(temp111 - temp123) < 2)//Checks if there is 1 solution  
+  //{
+  //  double D3;
+  //  D3 = BASE_TO_JOINT2_Z - STATION_TO_BASE_Z - z;
+  //  double Theta2 = 0;
+  //  double Theta1 = atan2(y / (D2_WRIST_TO_JOINT2_X + D1_BASE_TO_JOINT2_X), x / (D2_WRIST_TO_JOINT2_X + D1_BASE_TO_JOINT2_X));
+  //  double Phi = atan2(sPhi, cPhi);
+  //  double Theta4 = Phi - Theta1 - Theta2;
+  //  printf("\n\n*** There is 1 solution and it is: (%f deg, %f deg, %f mm, %f deg) \n", Theta1 * 180 / PI, Theta2 * 180 / PI, D3, Theta4 * 180 / PI);
+  //  firstFlag = true;
+  //  secondFlag = true;
+  //  closestSolution[0] = Theta1;
+  //  closestSolution[1] = Theta2;
+  //  closestSolution[2] = D3;
+  //  closestSolution[3] = Theta4;
+  //  return 0;
+  //}
 
 
   double Theta2_1 = atan2(s2, c2);
@@ -1067,6 +1078,8 @@ bool getSolutionsForInverseKIN(JOINT& toolPosition, JOINT& currentJointConfig, J
   multiplyTwoTransformMatrices(bTs, sTt, bTt);
   multiplyTwoTransformMatrices(bTt, tTw, bTw);
   bool status = calculateAllTwoSolutions(bTw, firstSol, secondSol, flagFirst, flagSecond);
+  printf("\n\nK1: %d  |  K2 = %d\n\n", flagFirst, flagSecond);
+
   if (!status) {
     return 0;
   }
