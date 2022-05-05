@@ -1,0 +1,54 @@
+﻿  forwardKinematics.cpp
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\forwardKinematics.cpp(14,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\forwardKinematics.cpp(15,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  helperFunctions.cpp
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(11,70): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(12,70): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(13,80): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(14,70): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(22,103): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(23,101): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(33,12): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'size_t'
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(33,12): message : consider using '%zd' in the format string
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(55,33): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(311,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(312,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(313,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\helperFunctions.cpp(314,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  inverseKinematics.cpp
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\inverseKinematics.cpp(114,36): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\inverseKinematics.cpp(136,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\inverseKinematics.cpp(137,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\inverseKinematics.cpp(139,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\inverseKinematics.cpp(140,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\inverseKinematics.cpp(261,64): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\inverseKinematics.cpp(235,19): warning C4101: 'wrels': unreferenced local variable
+  Source.cpp
+  testKinematics.cpp
+  trajectoryPlanning.cpp
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(298,56): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(334,20): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(358,20): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(376,31): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(436,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(491,19): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(544,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(547,53): warning C4244: 'argument': conversion from 'double' to 'const unsigned __int64', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(547,85): warning C4244: 'argument': conversion from 'double' to 'const unsigned __int64', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(547,121): warning C4244: 'argument': conversion from 'double' to 'const unsigned __int64', possible loss of data
+  Generating Code...
+forwardKinematics.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) bool __cdecl MoveToConfiguration(double (&)[4],bool)" (__imp_?MoveToConfiguration@@YA_NAEAY03N_N@Z) referenced in function "void __cdecl forwardKinematics(double (&)[4],double (&)[4])" (?forwardKinematics@@YAXAEAY03N0@Z)
+inverseKinematics.obj : error LNK2001: unresolved external symbol "__declspec(dllimport) bool __cdecl MoveToConfiguration(double (&)[4],bool)" (__imp_?MoveToConfiguration@@YA_NAEAY03N_N@Z)
+Source.obj : error LNK2001: unresolved external symbol "__declspec(dllimport) bool __cdecl MoveToConfiguration(double (&)[4],bool)" (__imp_?MoveToConfiguration@@YA_NAEAY03N_N@Z)
+testKinematics.obj : error LNK2001: unresolved external symbol "__declspec(dllimport) bool __cdecl MoveToConfiguration(double (&)[4],bool)" (__imp_?MoveToConfiguration@@YA_NAEAY03N_N@Z)
+helperFunctions.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) bool __cdecl Grasp(bool)" (__imp_?Grasp@@YA_N_N@Z) referenced in function "void __cdecl toggleGripper(bool &)" (?toggleGripper@@YAXAEA_N@Z)
+inverseKinematics.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) bool __cdecl GetConfiguration(double (&)[4])" (__imp_?GetConfiguration@@YA_NAEAY03N@Z) referenced in function "bool __cdecl inverseKinematics(double (&)[4],unsigned char,unsigned char)" (?inverseKinematics@@YA_NAEAY03NEE@Z)
+testKinematics.obj : error LNK2001: unresolved external symbol "__declspec(dllimport) bool __cdecl GetConfiguration(double (&)[4])" (__imp_?GetConfiguration@@YA_NAEAY03N@Z)
+trajectoryPlanning.obj : error LNK2001: unresolved external symbol "__declspec(dllimport) bool __cdecl GetConfiguration(double (&)[4])" (__imp_?GetConfiguration@@YA_NAEAY03N@Z)
+Source.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) void __cdecl StopRobot(void)" (__imp_?StopRobot@@YAXXZ) referenced in function main
+trajectoryPlanning.obj : error LNK2001: unresolved external symbol "__declspec(dllimport) void __cdecl StopRobot(void)" (__imp_?StopRobot@@YAXXZ)
+Source.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) bool __cdecl ResetRobot(void)" (__imp_?ResetRobot@@YA_NXZ) referenced in function main
+trajectoryPlanning.obj : error LNK2001: unresolved external symbol "__declspec(dllimport) bool __cdecl ResetRobot(void)" (__imp_?ResetRobot@@YA_NXZ)
+trajectoryPlanning.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) bool __cdecl MoveWithConfVelAcc(double (&)[4],double (&)[4],double (&)[4])" (__imp_?MoveWithConfVelAcc@@YA_NAEAY03N00@Z) referenced in function "void __cdecl planPathBasedOnJointSpace(double (&)[4],double (&)[4],double (&)[4],double (&)[4],double (&)[4],double)" (?planPathBasedOnJointSpace@@YAXAEAY03N0000N@Z)
+..\Study\Original_Repo\PowerCubeSim.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\x64\Debug\Project_Demo_1.exe : fatal error LNK1120: 6 unresolved externals

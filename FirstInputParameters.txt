@@ -1,0 +1,6 @@
+ -- You have entered following parameters  --
+                X      Y       Z     phi
+        A:  [  230 |  115 |   50 |    0 ]
+        B:  [  230 |    0 |   50 |    0 ]
+        C:  [  230 | -115 |   50 |    0 ]
+        G:  [  230 | -230 |   50 |    0 ]

@@ -1,8 +1,2 @@
-﻿  trajectoryPlanning.cpp
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(436,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(491,19): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(544,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(547,53): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(547,85): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(547,121): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
+﻿  Source.cpp
   Project_Demo_1.vcxproj -> C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Debug\Project_Demo_1.exe

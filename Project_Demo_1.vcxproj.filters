@@ -64,7 +64,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\Study\Original_Repo\PowerCubeSim.lib">
+    <Library Include="LibFiles\PowerCubeSim.lib">
       <Filter>Resource Files</Filter>
     </Library>
   </ItemGroup>
