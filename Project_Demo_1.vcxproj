@@ -141,11 +141,21 @@
   <ItemGroup>
     <ClInclude Include="ensc-488.h" />
     <ClInclude Include="ensc894.h" />
+    <ClInclude Include="forwardKinematics.h" />
+    <ClInclude Include="helperFunctions.h" />
+    <ClInclude Include="inverseKinematics.h" />
     <ClInclude Include="stateid.h" />
     <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="testKinematics.h" />
+    <ClInclude Include="trajectoryPlanning.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="forwardKinematics.cpp" />
+    <ClCompile Include="helperFunctions.cpp" />
+    <ClCompile Include="inverseKinematics.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="testKinematics.cpp" />
+    <ClCompile Include="trajectoryPlanning.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Study\Original_Repo\PowerCubeSim.lib" />

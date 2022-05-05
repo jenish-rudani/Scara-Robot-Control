@@ -1,40 +1,8 @@
-﻿  Source.cpp
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(105,20): warning C4101: 'z_a': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(107,20): warning C4101: 'z_c': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(105,25): warning C4101: 'phi_a': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(108,15): warning C4101: 'y_g': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(106,15): warning C4101: 'y_b': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(107,15): warning C4101: 'y_c': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(107,10): warning C4101: 'x_c': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(106,25): warning C4101: 'phi_b': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(106,10): warning C4101: 'x_b': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(107,25): warning C4101: 'phi_c': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(105,15): warning C4101: 'y_a': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(108,25): warning C4101: 'phi_g': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(108,20): warning C4101: 'z_g': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(108,10): warning C4101: 'x_g': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(106,20): warning C4101: 'z_b': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(105,10): warning C4101: 'x_a': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(387,11): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(526,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(579,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(585,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(587,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(603,19): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(656,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(659,53): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(659,85): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(659,121): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(775,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(776,25): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(979,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(980,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(982,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(983,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1098,64): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1072,19): warning C4101: 'wrels': unreferenced local variable
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1367,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1368,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1369,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Source.cpp(1370,15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+﻿  trajectoryPlanning.cpp
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(436,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(491,19): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(544,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(547,53): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(547,85): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
+C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\trajectoryPlanning.cpp(547,121): warning C4244: 'argument': conversion from 'double' to 'const unsigned int', possible loss of data
   Project_Demo_1.vcxproj -> C:\Users\jruda\Documents\School\ENSC_894\Project_Demo_1\Debug\Project_Demo_1.exe
